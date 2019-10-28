@@ -6,6 +6,8 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
 import createReducer from './reducers';
+import storage from 'redux-persist/lib/storage';
+import { persistStore, persistReducer } from 'redux-persist';
 
 export default function configureStore(initialState = {}, history) {
   let composeEnhancers = compose;
@@ -35,12 +37,19 @@ export default function configureStore(initialState = {}, history) {
   const middlewares = [sagaMiddleware, routerMiddleware(history)];
 
   const enhancers = [applyMiddleware(...middlewares)];
-
+  const persistConfig = {
+    key: 'root',
+    storage: storage,
+    whitelist: ['language', 'auth', 'global', 'router'],
+  };
+  const persistedReducer = persistReducer(persistConfig, createReducer());
   const store = createStore(
-    createReducer(),
+    persistedReducer,
     initialState,
     composeEnhancers(...enhancers),
   );
+
+  const persistor = persistStore(store);
 
   // Extensions
   store.runSaga = sagaMiddleware.run;
@@ -55,5 +64,5 @@ export default function configureStore(initialState = {}, history) {
     });
   }
 
-  return store;
+  return { store, persistor };
 }
