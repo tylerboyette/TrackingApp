@@ -10,11 +10,9 @@ import {
 } from './actions';
 
 export function* loginRequest(action) {
+  console.log(action);
   try {
-    const data = yield call(request, 'auth/login', 'POST', {
-      email: action.email,
-      password: action.password,
-    });
+    const data = yield call(request, 'auth/login', 'POST', action.data);
     yield put(loginSuccess(data));
   } catch (err) {
     yield put(loginError(err));
@@ -25,7 +23,7 @@ export function* signupRequest(action) {
   try {
     const data = yield call(request, 'auth/signup', 'POST', action.data);
     yield put(signupSuccess(data));
-    notify.success('Your account has been created');
+    // notify.success('Your account has been created');
     // history.push('/login');
   } catch (err) {
     yield put(signupError(err));

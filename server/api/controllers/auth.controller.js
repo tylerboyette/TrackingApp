@@ -18,7 +18,7 @@ function login(req, res, next) {
         .then(() => {
           const token = jwt.sign(
             {
-          _id: user._id, // eslint-disable-line
+              _id: user._id, // eslint-disable-line
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,
@@ -29,7 +29,7 @@ function login(req, res, next) {
           );
 
           res.json({
-          _id: user._id, // eslint-disable-line
+            _id: user._id, // eslint-disable-line
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,

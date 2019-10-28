@@ -17,6 +17,7 @@ import FontFaceObserver from 'fontfaceobserver';
 import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 
+import 'semantic-ui-css/semantic.min.css';
 // Import root app
 import App from 'containers/App';
 
