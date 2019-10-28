@@ -8,39 +8,43 @@
  */
 
 import produce from 'immer';
-import { LOAD_REPOS_SUCCESS, LOAD_REPOS, LOAD_REPOS_ERROR } from './constants';
+import { fromJS } from 'immutable';
+import { REHYDRATE } from 'redux-persist';
+import * as CONSTANTS from './constants';
 
 // The initial state of the App
-export const initialState = {
+const initialState = fromJS({
+  persistLoaded: false,
   loading: false,
-  error: false,
-  currentUser: false,
-  userData: {
-    repositories: false,
+  notification: {
+    type: '',
+    visible: false,
+    heading: '',
+    message: '',
   },
-};
+});
 
 /* eslint-disable default-case, no-param-reassign */
-const appReducer = (state = initialState, action) =>
-  produce(state, draft => {
-    switch (action.type) {
-      case LOAD_REPOS:
-        draft.loading = true;
-        draft.error = false;
-        draft.userData.repositories = false;
-        break;
 
-      case LOAD_REPOS_SUCCESS:
-        draft.userData.repositories = action.repos;
-        draft.loading = false;
-        draft.currentUser = action.username;
-        break;
-
-      case LOAD_REPOS_ERROR:
-        draft.error = action.error;
-        draft.loading = false;
-        break;
-    }
-  });
+function appReducer(state = initialState, action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return state.set('persistLoaded', true);
+    case CONSTANTS.SET_API_LOADING:
+      return state.set('loading', action.value);
+    case CONSTANTS.SET_GLOBAL_NOTIFICATION:
+      return state.set(
+        'notification',
+        fromJS({
+          type: action.messageType,
+          visible: action.visible,
+          heading: action.heading,
+          message: action.message,
+        }),
+      );
+    default:
+      return state;
+  }
+}
 
 export default appReducer;

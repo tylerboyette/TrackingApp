@@ -13,7 +13,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Dashboard from './dashboard';
 
@@ -32,6 +32,7 @@ export function App({}) {
     <div>
       <Switch>
         <Route exact path="/" component={Dashboard} />
+        <Route render={() => <Redirect to="/" />} />
       </Switch>
     </div>
   );

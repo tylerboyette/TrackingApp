@@ -8,7 +8,7 @@ const selectGlobal = state => state.get('global');
 
 const selectRoute = state => state.get('route');
 
-const selectAuth = state => state.get('auth');
+const selectAuth = state => state.auth;
 
 const makeSelectCurrentUser = () =>
   createSelector(

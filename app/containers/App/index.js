@@ -22,7 +22,7 @@ import styled from 'styled-components';
 // import Footer from 'components/Footer';
 
 import AuthModule from 'modules/auth/Loadable';
-// import AppModule from 'modules/app/Loadable';
+import AppModule from 'modules/app/Loadable';
 
 import reducer from 'modules/auth/redux/reducer';
 import saga from 'modules/auth/redux/saga';
@@ -30,6 +30,7 @@ import saga from 'modules/auth/redux/saga';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 // import GlobalStyle from '../../global-styles';
+import { makeSelectCurrentUser } from './selectors';
 
 const AppWrapper = styled.div`
   max-width: calc(768px + 16px * 2);
@@ -41,8 +42,8 @@ const AppWrapper = styled.div`
 `;
 function App(auth) {
   const renderApp = () => {
-    console.log(auth);
-    return <AuthModule />;
+    console.log(auth.currentUser ? auth.currentUser.get('firstName') : '');
+    return auth.currentUser ? <AppModule /> : <AuthModule />;
   };
   return (
     <AppWrapper>
@@ -67,9 +68,10 @@ function App(auth) {
   );
 }
 
-const mapStateToProps = state => ({
-  auth: state,
+const mapStateToProps = createStructuredSelector({
+  currentUser: makeSelectCurrentUser(),
 });
+
 const withReducer = injectReducer({ key: 'auth', reducer });
 const withSaga = injectSaga({ key: 'auth', saga });
 const withConnect = connect(mapStateToProps);
