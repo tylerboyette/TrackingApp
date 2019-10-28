@@ -39,8 +39,11 @@ const AppWrapper = styled.div`
   padding: 0 16px;
   flex-direction: column;
 `;
-function App() {
-  const renderApp = () => <AuthModule />;
+function App(auth) {
+  const renderApp = () => {
+    console.log(auth);
+    return <AuthModule />;
+  };
   return (
     <AppWrapper>
       {/* <Helmet
@@ -64,7 +67,9 @@ function App() {
   );
 }
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = state => ({
+  auth: state,
+});
 const withReducer = injectReducer({ key: 'auth', reducer });
 const withSaga = injectSaga({ key: 'auth', saga });
 const withConnect = connect(mapStateToProps);

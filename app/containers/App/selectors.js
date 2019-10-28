@@ -3,47 +3,54 @@
  */
 
 import { createSelector } from 'reselect';
-import { initialState } from './reducer';
 
-const selectGlobal = state => state.global || initialState;
+const selectGlobal = state => state.get('global');
 
-const selectRouter = state => state.router;
+const selectRoute = state => state.get('route');
+
+const selectAuth = state => state.get('auth');
 
 const makeSelectCurrentUser = () =>
   createSelector(
-    selectGlobal,
-    globalState => globalState.currentUser,
+    selectAuth,
+    globalState => globalState.get('currentUser'),
   );
 
 const makeSelectLoading = () =>
   createSelector(
     selectGlobal,
-    globalState => globalState.loading,
+    globalState => globalState.get('loading'),
   );
 
-const makeSelectError = () =>
+const makeSelectPersisting = () =>
   createSelector(
     selectGlobal,
-    globalState => globalState.error,
+    globalState => globalState.get('persisted'),
   );
 
-const makeSelectRepos = () =>
+const makeSelectPersistLoaded = () =>
   createSelector(
     selectGlobal,
-    globalState => globalState.userData.repositories,
+    globalState => globalState.get('persistLoaded'),
+  );
+
+const makeSelectNotification = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.get('notification'),
   );
 
 const makeSelectLocation = () =>
   createSelector(
-    selectRouter,
-    routerState => routerState.location,
+    selectRoute,
+    routeState => routeState.get('location').toJS(),
   );
 
 export {
   selectGlobal,
   makeSelectCurrentUser,
   makeSelectLoading,
-  makeSelectError,
-  makeSelectRepos,
+  makeSelectNotification,
   makeSelectLocation,
+  makeSelectPersistLoaded,
 };

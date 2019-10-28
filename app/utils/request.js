@@ -76,7 +76,6 @@ export default function request(
     successAction = data.success;
     failureAction = data.failure;
   }
-  console.log(body);
   // store.dispatch(setAPILoading(true));
   if (isAPI) {
     requestUrl = `/api/${url}`;
@@ -98,7 +97,7 @@ export default function request(
     }
     headers.Authorization = `Bearer ${token}`;
   }
-  console.log(requestUrl);
+
   return fetch(requestUrl, {
     ...options,
     headers,
