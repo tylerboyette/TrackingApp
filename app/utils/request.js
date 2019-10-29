@@ -58,6 +58,7 @@ export default function request(
   let requestUrl = url;
   const options = { method };
 
+  // console.log('hello', requestUrl);
   let headers = {
     'content-type': 'application/json',
   };
@@ -65,7 +66,7 @@ export default function request(
   if (data.header_type) {
     headers = {};
   }
-  const store = getStore();
+  const { store } = getStore();
 
   let body = null;
   let successAction = null;
@@ -77,16 +78,18 @@ export default function request(
     failureAction = data.failure;
   }
   // store.dispatch(setAPILoading(true));
+
   if (isAPI) {
     requestUrl = `/api/${url}`;
   }
+  console.log('hello', requestUrl);
   if (body) {
     if (!data.header_type) options.body = JSON.stringify(body);
     else options.body = data.body;
   }
   if (includeToken) {
-    const currentUser = store.getState().getIn(['auth', 'currentUser']);
-    const token = currentUser && currentUser.get('token');
+    const currentUser = store.getState().auth.currentUser;
+    const token = currentUser && currentUser.token;
     const exp = currentUser
       ? moment(currentUser.get('exp'), 'X')
       : moment().subtract(1, 'day');

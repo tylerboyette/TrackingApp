@@ -24,6 +24,7 @@ import 'semantic-ui-css/semantic.min.css';
 
 // Import root app
 import App from 'containers/App';
+import LoadingIndicator from 'components/LoadingIndicator';
 
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
@@ -56,7 +57,7 @@ const render = messages => {
   ReactDOM.render(
     <Provider store={store}>
       <PersistGate
-        loading={null}
+        loading={<LoadingIndicator />}
         persistor={persistStore(store, { storage: localForage })}
       >
         <LanguageProvider messages={messages}>

@@ -49,6 +49,7 @@ function read(req, res) {
 }
 
 function list(req, res, next) {
+  console.log('hello');
   let where = {};
   if (req.user.role === ROLES.MANAGER) {
     where = { role: { $ne: ROLES.ADMIN } };
@@ -56,13 +57,13 @@ function list(req, res, next) {
 
   User.find(where)
     .then(users => {
+      console.log('users');
       res.json(users);
     })
     .catch(next);
 }
 
 function remove(req, res, next) {
-  console.log('req.userModel', req.userModel);
   req.userModel
     .remove(() => {
       res.json(req.userModel);

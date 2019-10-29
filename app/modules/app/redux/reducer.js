@@ -1,23 +1,18 @@
-import produce from 'immer';
-import * as CONSTANTS from './constants';
+import { combineReducers } from 'redux';
+import userReducer from '../user/redux/reducers';
+import entryReducer from '../entry/redux/reducers';
 
-// The initial state of the App
-export const initialState = {
-  name: null,
+const appReducer = combineReducers({
+  user: userReducer,
+  entry: entryReducer,
+});
+
+const rootReducer = (state, action) => {
+  if (action.type === 'auth/logout') {
+    return appReducer(undefined, action);
+  }
+
+  return appReducer(state, action);
 };
 
-/* eslint-disable default-case, no-param-reassign */
-const appReducer = (state = initialState, action) =>
-  produce(state, draft => {
-    switch (action.type) {
-      case CONSTANTS.LOGIN_SUCCESS:
-        // Delete prefixed '@' from the github username
-        draft.name = action.data;
-        break;
-      case CONSTANTS.LOGOUT:
-        draft.name = null;
-        break;
-    }
-  });
-
-export default appReducer;
+export default rootReducer;

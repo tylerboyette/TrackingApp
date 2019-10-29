@@ -1,21 +1,23 @@
-import { fromJS } from 'immutable';
+import produce from 'immer';
 import * as CONSTANTS from './constants';
 
-const initalState = fromJS({
+// The initial state of the App
+export const initialState = {
   currentUser: null,
-});
+};
 
-function authReducer(state = initalState, action) {
-  switch (action.type) {
-    case CONSTANTS.LOGIN_SUCCESS:
-      console.log('hello, authReducer');
-      return state.set('currentUser', fromJS(action.data));
-    case CONSTANTS.LOGOUT:
-      return state.delete('currentUser');
-    default:
-  }
-
-  return state;
-}
+/* eslint-disable default-case, no-param-reassign */
+const authReducer = (state = initialState, action) =>
+  produce(state, draft => {
+    switch (action.type) {
+      case CONSTANTS.LOGIN_SUCCESS:
+        console.log('hello, success');
+        draft.currentUser = action.data;
+        break;
+      case CONSTANTS.LOGOUT:
+        draft.currentUser = null;
+        break;
+    }
+  });
 
 export default authReducer;

@@ -13,7 +13,7 @@ const selectAuth = state => state.auth;
 const makeSelectCurrentUser = () =>
   createSelector(
     selectAuth,
-    globalState => globalState.get('currentUser'),
+    globalState => globalState.currentUser,
   );
 
 const makeSelectLoading = () =>

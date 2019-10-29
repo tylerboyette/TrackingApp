@@ -40,7 +40,7 @@ export default function configureStore(initialState = {}, history) {
   const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['language', 'auth', 'global', 'router', 'app'],
+    whitelist: ['language', 'auth', 'app', 'global', 'router'],
   };
   const persistedReducer = persistReducer(persistConfig, createReducer());
   const store = createStore(
