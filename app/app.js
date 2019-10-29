@@ -15,8 +15,10 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import FontFaceObserver from 'fontfaceobserver';
 import history from 'utils/history';
-import { PersistGate } from 'redux-persist/es/integration/react';
-
+import { PersistGate } from 'redux-persist/integration/react';
+import { setAutoFreeze } from 'immer';
+import { persistStore } from 'redux-persist';
+import { localForage } from 'localforage';
 import 'sanitize.css/sanitize.css';
 import 'semantic-ui-css/semantic.min.css';
 
@@ -46,13 +48,17 @@ openSansObserver.load().then(() => {
 
 // Create redux store with history
 const initialState = {};
-const { store, persistor } = configureStore(initialState, history);
+const { store } = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
+setAutoFreeze(false);
 
 const render = messages => {
   ReactDOM.render(
     <Provider store={store}>
-      <PersistGate persistor={persistor}>
+      <PersistGate
+        loading={null}
+        persistor={persistStore(store, { storage: localForage })}
+      >
         <LanguageProvider messages={messages}>
           <ConnectedRouter history={history}>
             <App />

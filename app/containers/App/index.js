@@ -41,10 +41,7 @@ const AppWrapper = styled.div`
   flex-direction: column;
 `;
 function App(auth) {
-  const renderApp = () => {
-    console.log(auth.currentUser ? auth.currentUser.get('firstName') : '');
-    return auth.currentUser ? <AppModule /> : <AuthModule />;
-  };
+  const renderApp = () => (auth.currentUser ? <AppModule /> : <AuthModule />);
   return (
     <AppWrapper>
       {/* <Helmet

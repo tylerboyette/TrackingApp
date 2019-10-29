@@ -8,7 +8,7 @@ const initalState = fromJS({
 function authReducer(state = initalState, action) {
   switch (action.type) {
     case CONSTANTS.LOGIN_SUCCESS:
-      console.log('hello');
+      console.log('hello, authReducer');
       return state.set('currentUser', fromJS(action.data));
     case CONSTANTS.LOGOUT:
       return state.delete('currentUser');

@@ -8,12 +8,12 @@
  */
 
 import produce from 'immer';
-import { fromJS } from 'immutable';
 import { REHYDRATE } from 'redux-persist';
 import * as CONSTANTS from './constants';
 
 // The initial state of the App
-const initialState = fromJS({
+
+export const initialState = {
   persistLoaded: false,
   loading: false,
   notification: {
@@ -22,29 +22,28 @@ const initialState = fromJS({
     heading: '',
     message: '',
   },
-});
+};
 
 /* eslint-disable default-case, no-param-reassign */
+const appReducer = (state = initialState, action) =>
+  produce(state, draft => {
+    switch (action.type) {
+      case REHYDRATE:
+        draft.persistLoaded = true;
+        break;
+      case CONSTANTS.SET_API_LOADING:
+        draft.loading = action.value;
+        break;
 
-function appReducer(state = initialState, action) {
-  switch (action.type) {
-    case REHYDRATE:
-      return state.set('persistLoaded', true);
-    case CONSTANTS.SET_API_LOADING:
-      return state.set('loading', action.value);
-    case CONSTANTS.SET_GLOBAL_NOTIFICATION:
-      return state.set(
-        'notification',
-        fromJS({
+      case CONSTANTS.SET_GLOBAL_NOTIFICATION:
+        draft.notification = {
           type: action.messageType,
           visible: action.visible,
           heading: action.heading,
           message: action.message,
-        }),
-      );
-    default:
-      return state;
-  }
-}
+        };
+        break;
+    }
+  });
 
 export default appReducer;
