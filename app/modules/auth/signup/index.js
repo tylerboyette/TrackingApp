@@ -31,9 +31,7 @@ class SignupPage extends Component {
         notify.success('Your account has been created');
         this.props.history.push('/login');
       },
-      failure: () => {
-        console.log('failure request');
-      },
+      failure: () => {},
     });
   };
 

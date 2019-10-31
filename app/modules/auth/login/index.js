@@ -26,12 +26,8 @@ class LoginPage extends Component {
     const { email, password } = this.state;
     this.props.loginRequest({
       body: { email, password },
-      success: () => {
-        // console.log('success');
-      },
-      failure: () => {
-        // console.log('failure');
-      },
+      success: () => {},
+      failure: () => {},
     });
   };
 

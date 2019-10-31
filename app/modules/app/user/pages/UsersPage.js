@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
+import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Link } from 'react-router-dom';
-import { createStructuredSelector } from 'reselect';
+
+import { makeSelectCurrentUser } from 'containers/App/selectors';
+import injectReducer from 'utils/injectReducer';
+import injectSaga from 'utils/injectSaga';
+import { userListRequest } from '../redux/actions';
+import { makeSelectUserList } from '../redux/selectors';
+import reducer from '../../redux/reducer';
+import saga from '../../redux/saga';
+import Pagination from 'components/Pagination';
 import {
   Table,
   Header,
@@ -12,28 +21,15 @@ import {
   Button,
   Confirm,
 } from 'semantic-ui-react';
-import Pagination from 'components/Pagination';
-import { userListRequest, userDeleteRequest } from '../redux/actions';
-import {
-  makeSelectUserList,
-  makeSelectUserListLoading,
-} from '../redux/selectors';
 
 class UsersPage extends Component {
-  constructor(...args) {
-    super(...args);
-    this.state = {
-      deleteId: null,
-      showDeleteConfirm: false,
-      page: 1,
-      pageSize: 10,
-    };
+  constructor(props) {
+    super(props);
   }
 
   componentWillMount() {
-    this.props.userList();
+    this.props.userListRequest();
   }
-
   onChangePage = page => {
     this.setState({ page });
   };
@@ -46,22 +42,13 @@ class UsersPage extends Component {
     this.props.userDelete(this.state.deleteId);
     this.setState({ showDeleteConfirm: false });
   };
-
-  handleCancel = () => this.setState({ showDeleteConfirm: false });
-
   renderUsers = () => {
     const { users } = this.props;
-    const { page, pageSize } = this.state;
-    console.log('users', users);
-    if (!users.size) {
-      return (
-        <Table.Row>
-          <Table.Cell colSpan="4">No Users</Table.Cell>
-        </Table.Row>
-      );
-    }
 
-    return users.slice((page - 1) * pageSize, page * pageSize).map(user => (
+    if (!users.length) {
+      return <div>No Users</div>;
+    }
+    return users.map((user, index) => (
       <Table.Row key={user._id}>
         <Table.Cell>
           <Link to={`/users/${user._id}`}>
@@ -97,20 +84,9 @@ class UsersPage extends Component {
   };
 
   render() {
-    const { users, loading } = this.props;
-    const { page, pageSize, showDeleteConfirm } = this.state;
-
+    const { users } = this.props;
     return (
-      <Container>
-        <Confirm
-          open={showDeleteConfirm}
-          content="Are you sure to delete this user?"
-          onCancel={this.handleCancel}
-          onConfirm={this.handleConfirm}
-        />
-        <Dimmer active={loading}>
-          <Loader />
-        </Dimmer>
+      <div style={{ marginTop: '50px' }}>
         <Header as="h2" content="Users" />
         <Table celled>
           <Table.Header>
@@ -124,32 +100,31 @@ class UsersPage extends Component {
 
           <Table.Body>{this.renderUsers()}</Table.Body>
 
-          <Table.Footer>
+          {/* <Table.Footer>
             <Table.Row>
               <Table.HeaderCell colSpan="4">
-                {/* <Pagination
-                  total={users.size}
+                <Pagination
+                  total={users.length}
                   currentPage={page}
                   onChange={this.onChangePage}
                   perPage={pageSize}
-                /> */}
+                />
               </Table.HeaderCell>
             </Table.Row>
-          </Table.Footer>
+          </Table.Footer> */}
         </Table>
-      </Container>
+      </div>
     );
   }
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUser: makeSelectCurrentUser(),
   users: makeSelectUserList(),
-  loading: makeSelectUserListLoading(),
 });
 
 const mapDispatchToProps = {
-  userList: userListRequest,
-  userDelete: userDeleteRequest,
+  userListRequest,
 };
 
 const withConnect = connect(
@@ -157,4 +132,11 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export default compose(withConnect)(UsersPage);
+const withReducer = injectReducer({ key: 'app', reducer });
+const withSaga = injectSaga({ key: 'app', saga });
+
+export default compose(
+  withConnect,
+  withReducer,
+  withSaga,
+)(UsersPage);

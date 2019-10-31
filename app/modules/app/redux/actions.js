@@ -1,49 +1,14 @@
 import * as CONSTANTS from './constants';
 
-export function loginRequest(data) {
+export function testAction(data) {
   return {
-    type: CONSTANTS.LOGIN_REQUEST,
+    type: CONSTANTS.Test_Action,
     data,
   };
 }
-
-export function loginSuccess(data) {
+export function testActionSuccess(data) {
   return {
-    type: CONSTANTS.LOGIN_SUCCESS,
+    type: CONSTANTS.Test_Action_Success,
     data,
-  };
-}
-
-export function loginError(data) {
-  return {
-    type: CONSTANTS.LOGIN_ERROR,
-    ...data,
-  };
-}
-
-export function signupRequest(data) {
-  return {
-    type: CONSTANTS.SIGNUP_REQUEST,
-    data,
-  };
-}
-
-export function signupSuccess(data) {
-  return {
-    type: CONSTANTS.SIGNUP_SUCCESS,
-    data,
-  };
-}
-
-export function signupError(data) {
-  return {
-    type: CONSTANTS.SIGNUP_ERROR,
-    ...data,
-  };
-}
-
-export function logout() {
-  return {
-    type: CONSTANTS.LOGOUT,
   };
 }

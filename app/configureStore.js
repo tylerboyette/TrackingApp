@@ -9,6 +9,12 @@ import storage from 'redux-persist/lib/storage';
 import { persistStore, persistReducer } from 'redux-persist';
 import createReducer from './reducers';
 
+let storeObj = null;
+
+export function getStore() {
+  return storeObj;
+}
+
 export default function configureStore(initialState = {}, history) {
   let composeEnhancers = compose;
   const reduxSagaMonitorOptions = {};
@@ -40,7 +46,7 @@ export default function configureStore(initialState = {}, history) {
   const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['language', 'auth', 'app', 'global', 'router'],
+    whitelist: ['language', 'global', 'router'],
   };
   const persistedReducer = persistReducer(persistConfig, createReducer());
   const store = createStore(
@@ -63,6 +69,8 @@ export default function configureStore(initialState = {}, history) {
       store.replaceReducer(createReducer(store.injectedReducers));
     });
   }
+
+  storeObj = store;
 
   return { store, persistor };
 }

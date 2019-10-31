@@ -10,7 +10,6 @@ import storage from 'redux-persist/lib/storage';
 import history from 'utils/history';
 import globalReducer from 'containers/App/reducer';
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
-
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
  */

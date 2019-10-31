@@ -24,12 +24,10 @@ import TopBar from './layout/components/TopBar';
 
 import Dashboard from './dashboard';
 import UsersPage from './user/pages/UsersPage';
-import UserEditPage from './user/pages/UserEditPage';
+// import UserEditPage from './user/pages/UserEditPage';
 // import EntriesPage from './entry/pages/EntriesPage';
 // import WeeklyReport from './entry/pages/ReportPage';
 // import EntryEditPage from './entry/pages/EntryEditPage';
-
-const key = 'app';
 
 class App extends Component {
   adminRoutes() {
@@ -37,8 +35,7 @@ class App extends Component {
       <Switch>
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/users" component={UsersPage} />
-        <Route exact path="/users/:id" component={UserEditPage} />
-
+        {/* <Route exact path="/users/:id" component={UserEditPage} /> } */}
         <Route render={() => <Redirect to="/" />} />
       </Switch>
     );
@@ -89,5 +86,4 @@ export default compose(
   withConnect,
   withReducer,
   withSaga,
-  memo,
 )(App);

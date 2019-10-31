@@ -13,7 +13,7 @@ import moment from 'moment';
 //   setGlobalNotification,
 // } from 'containers/App/redux/actions';
 // import { logout } from 'modules/auth/redux/actions';
-import getStore from '../configureStore';
+import { getStore } from '../configureStore';
 
 function parseJSON(response) {
   if (response.status === 204 || response.status === 205) {
@@ -57,16 +57,14 @@ export default function request(
   // eslint-disable-line
   let requestUrl = url;
   const options = { method };
-
-  // console.log('hello', requestUrl);
   let headers = {
     'content-type': 'application/json',
   };
 
-  if (data.header_type) {
+  if (data && data.header_type) {
     headers = {};
   }
-  const { store } = getStore();
+  const store = getStore();
 
   let body = null;
   let successAction = null;
@@ -82,16 +80,15 @@ export default function request(
   if (isAPI) {
     requestUrl = `/api/${url}`;
   }
-  console.log('hello', requestUrl);
   if (body) {
-    if (!data.header_type) options.body = JSON.stringify(body);
+    if (data && !data.header_type) options.body = JSON.stringify(body);
     else options.body = data.body;
   }
   if (includeToken) {
-    const currentUser = store.getState().auth.currentUser;
+    const { currentUser } = store.getState().auth;
     const token = currentUser && currentUser.token;
     const exp = currentUser
-      ? moment(currentUser.get('exp'), 'X')
+      ? moment(currentUser.exp, 'X')
       : moment().subtract(1, 'day');
     if (moment().diff(exp) > 0) {
       // store.dispatch(setGlobalNotification('API Error', 'Token is expired'));
@@ -108,7 +105,6 @@ export default function request(
     .then(checkStatus)
     .then(parseJSON)
     .then(resp => {
-      console.log('success');
       // store.dispatch(setAPILoading(false));
       successAction && successAction();
       return resp;
