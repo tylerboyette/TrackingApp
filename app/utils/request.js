@@ -8,11 +8,8 @@
 
 import 'whatwg-fetch';
 import moment from 'moment';
-// import {
-//   setAPILoading,
-//   setGlobalNotification,
-// } from 'containers/App/redux/actions';
-// import { logout } from 'modules/auth/redux/actions';
+import { setAPILoading, setGlobalNotification } from 'containers/App/actions';
+import { logout } from 'modules/auth/redux/actions';
 import { getStore } from '../configureStore';
 
 function parseJSON(response) {
@@ -75,7 +72,7 @@ export default function request(
     successAction = data.success;
     failureAction = data.failure;
   }
-  // store.dispatch(setAPILoading(true));
+  store.dispatch(setAPILoading(true));
 
   if (isAPI) {
     requestUrl = `/api/${url}`;
@@ -91,8 +88,8 @@ export default function request(
       ? moment(currentUser.exp, 'X')
       : moment().subtract(1, 'day');
     if (moment().diff(exp) > 0) {
-      // store.dispatch(setGlobalNotification('API Error', 'Token is expired'));
-      // store.dispatch(logout());
+      store.dispatch(setGlobalNotification('API Error', 'Token is expired'));
+      store.dispatch(logout());
       return Promise.reject(new Error('Token is expired'));
     }
     headers.Authorization = `Bearer ${token}`;
@@ -105,30 +102,30 @@ export default function request(
     .then(checkStatus)
     .then(parseJSON)
     .then(resp => {
-      // store.dispatch(setAPILoading(false));
+      store.dispatch(setAPILoading(false));
       successAction && successAction();
       return resp;
     })
     .catch(err => {
       if (err.response) {
         err.response.json().then(json => {
-          // store.dispatch(
-          //   setGlobalNotification(
-          //     'Error',
-          //     json && json.message ? json.message : 'Unknown error',
-          //   ),
-          // );
+          store.dispatch(
+            setGlobalNotification(
+              'Error',
+              json && json.message ? json.message : 'Unknown error',
+            ),
+          );
         });
       } else {
-        // store.dispatch(
-        //   setGlobalNotification(
-        //     'API Error',
-        //     err && err.message ? err.message : 'Unknown error',
-        //   ),
-        // );
+        store.dispatch(
+          setGlobalNotification(
+            'API Error',
+            err && err.message ? err.message : 'Unknown error',
+          ),
+        );
       }
       failureAction && failureAction();
-      // store.dispatch(setAPILoading(false));
+      store.dispatch(setAPILoading(false));
       throw err;
     });
 }

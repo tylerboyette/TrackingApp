@@ -15,6 +15,8 @@ import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import { Container } from 'semantic-ui-react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+
+import Notification from 'containers/Notification';
 import { makeSelectCurrentUser } from 'containers/App/selectors';
 
 import reducer from './redux/reducer';
@@ -24,7 +26,8 @@ import TopBar from './layout/components/TopBar';
 
 import Dashboard from './dashboard';
 import UsersPage from './user/pages/UsersPage';
-// import UserEditPage from './user/pages/UserEditPage';
+import UserEditPage from './user/pages/UserEditPage';
+
 // import EntriesPage from './entry/pages/EntriesPage';
 // import WeeklyReport from './entry/pages/ReportPage';
 // import EntryEditPage from './entry/pages/EntryEditPage';
@@ -35,7 +38,18 @@ class App extends Component {
       <Switch>
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/users" component={UsersPage} />
-        {/* <Route exact path="/users/:id" component={UserEditPage} /> } */}
+        <Route exact path="/users/:id" component={UserEditPage} /> }
+        <Route render={() => <Redirect to="/" />} />
+      </Switch>
+    );
+  }
+
+  managerRoutes() {
+    return (
+      <Switch>
+        <Route exact path="/" component={Dashboard} />
+        <Route exact path="/users" component={UsersPage} />
+        <Route exact path="/users/:id" component={UserEditPage} /> }
         <Route render={() => <Redirect to="/" />} />
       </Switch>
     );
@@ -51,21 +65,12 @@ class App extends Component {
     );
   }
 
-  managerRoutes() {
-    return (
-      <Switch>
-        <Route exact path="/" component={Dashboard} />
-        <Route render={() => <Redirect to="/" />} />
-      </Switch>
-    );
-  }
-
   render() {
     const { currentUser } = this.props;
     return (
       <div className="main-app">
         <TopBar />
-        {/* <Notification /> */}
+        <Notification />
         <Container className="app-container">
           {this[`${currentUser.role}Routes`]()}
         </Container>

@@ -34,7 +34,15 @@ class UserPage extends Component {
   }
 
   onSubmit = () => {
-    this.props.userSave();
+    this.props.userSave({
+      success: () => {
+        console.log('success');
+        this.props.history.push('/users');
+      },
+      failure: () => {
+        this.props.history.push('/users');
+      },
+    });
   };
 
   onUpdateField = field => evt => {
@@ -75,37 +83,41 @@ class UserPage extends Component {
     ];
 
     return (
-      <Container fluid>
+      <Container fluid style={{ marginTop: '40px' }}>
         <Dimmer active={loading}>
           <Loader />
         </Dimmer>
-        <Header as="h2" content={user.get('_id') ? 'Edit User' : 'New User'} />
+        <Header
+          as="h2"
+          content={user._id ? 'Edit User' : 'New User'}
+          textAlign="center"
+        />
         <Form onSubmit={this.onSubmit}>
           <Segment>
             <Header as="h4" content="Basic Info" dividing />
             <Form.Input
               label="First Name"
               required
-              value={user.get('firstName') || ''}
+              value={user.firstName || ''}
               onChange={this.onUpdateField('firstName')}
             />
             <Form.Input
               label="Last Name"
               required
-              value={user.get('lastName') || ''}
+              value={user.lastName || ''}
               onChange={this.onUpdateField('lastName')}
             />
             <Form.Input
               label="Email"
               type="email"
               required
-              value={user.get('email') || ''}
+              value={user.email || ''}
               onChange={this.onUpdateField('email')}
             />
             <Form.Input
               label="Password"
               type="password"
-              value={user.get('password') || ''}
+              value={user.password || '****'}
               onChange={this.onUpdateField('password')}
             />
             {currentUser.role === 'admin' && (
@@ -116,7 +128,7 @@ class UserPage extends Component {
                   fluid
                   selection
                   options={roleOptions}
-                  value={user.get('role') || 'user'}
+                  value={user.role || 'user'}
                   onChange={this.onUpdateDropdown('role')}
                 />
               </Form.Field>
@@ -133,7 +145,7 @@ class UserPage extends Component {
 const mapStateToProps = createStructuredSelector({
   user: makeSelectUser(),
   currentUser: makeSelectCurrentUser(),
-  loading: makeSelectUserLoading(),
+  // loading: makeSelectUserLoading(),
 });
 
 const mapDispatchToProps = {

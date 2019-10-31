@@ -62,11 +62,9 @@ function list(req, res, next) {
 }
 
 function remove(req, res, next) {
-  req.userModel
-    .remove(() => {
-      res.json(req.userModel);
-    })
-    .catch(next);
+  req.userModel.remove(() => {
+    res.json(req.userModel);
+  });
 }
 
 function getUserByID(req, res, next, id) {

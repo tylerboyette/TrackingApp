@@ -22,6 +22,7 @@ import { localForage } from 'localforage';
 import 'sanitize.css/sanitize.css';
 import 'semantic-ui-css/semantic.min.css';
 
+import initializeNotify from './utils/notify';
 // Import root app
 import App from 'containers/App';
 import LoadingIndicator from 'components/LoadingIndicator';
@@ -51,6 +52,7 @@ openSansObserver.load().then(() => {
 const initialState = {};
 const { store } = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
+global.notify = initializeNotify(store);
 setAutoFreeze(false);
 
 const render = messages => {

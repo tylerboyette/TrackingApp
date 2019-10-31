@@ -3,12 +3,15 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Link } from 'react-router-dom';
-
 import { makeSelectCurrentUser } from 'containers/App/selectors';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
-import { userListRequest } from '../redux/actions';
-import { makeSelectUserList } from '../redux/selectors';
+
+import { userListRequest, userDeleteRequest } from '../redux/actions';
+import {
+  makeSelectUserList,
+  makeSelectUserListLoading,
+} from '../redux/selectors';
 import reducer from '../../redux/reducer';
 import saga from '../../redux/saga';
 import Pagination from 'components/Pagination';
@@ -23,8 +26,14 @@ import {
 } from 'semantic-ui-react';
 
 class UsersPage extends Component {
-  constructor(props) {
-    super(props);
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      deleteId: null,
+      showDeleteConfirm: false,
+      page: 1,
+      pageSize: 10,
+    };
   }
 
   componentWillMount() {
@@ -44,53 +53,72 @@ class UsersPage extends Component {
   };
   renderUsers = () => {
     const { users } = this.props;
+    const { page, pageSize } = this.state;
 
     if (!users.length) {
-      return <div>No Users</div>;
+      return (
+        <Table.Row>
+          <Table.Cell colSpan="4">No Users</Table.Cell>
+        </Table.Row>
+      );
     }
-    return users.map((user, index) => (
-      <Table.Row key={user._id}>
-        <Table.Cell>
-          <Link to={`/users/${user._id}`}>
-            {user.firstName}
+    return users
+      .slice((page - 1) * pageSize, page * pageSize)
+      .map((user, index) => (
+        <Table.Row key={user._id}>
+          <Table.Cell>{(page - 1) * pageSize + index + 1}</Table.Cell>
+          <Table.Cell>
+            <Link to={`/users/${user._id}`}>
+              {user.firstName}
+              &nbsp;
+              {user.lastName}
+            </Link>
+          </Table.Cell>
+          <Table.Cell>{user.email}</Table.Cell>
+          <Table.Cell>{user.role}</Table.Cell>
+          <Table.Cell>
+            <Button
+              color="teal"
+              size="mini"
+              as={Link}
+              to={`/users/${user._id}`}
+              content="View"
+              icon="edit"
+              labelPosition="left"
+            />
             &nbsp;
-            {user.lastName}
-          </Link>
-        </Table.Cell>
-        <Table.Cell>{user.email}</Table.Cell>
-        <Table.Cell>{user.role}</Table.Cell>
-        <Table.Cell>
-          <Button
-            color="teal"
-            size="mini"
-            as={Link}
-            to={`/users/${user._id}`}
-            content="View"
-            icon="edit"
-            labelPosition="left"
-          />
-          &nbsp;
-          <Button
-            color="orange"
-            size="mini"
-            content="Remove"
-            icon="minus"
-            labelPosition="left"
-            onClick={this.onRemove(user._id)}
-          />
-        </Table.Cell>
-      </Table.Row>
-    ));
+            <Button
+              color="orange"
+              size="mini"
+              content="Remove"
+              icon="minus"
+              labelPosition="left"
+              onClick={this.onRemove(user._id)}
+            />
+          </Table.Cell>
+        </Table.Row>
+      ));
   };
 
   render() {
-    const { users } = this.props;
+    const { users, loading } = this.props;
+    const { page, pageSize, showDeleteConfirm } = this.state;
     return (
-      <div style={{ marginTop: '50px' }}>
-        <Header as="h2" content="Users" />
+      <Container style={{ marginTop: '40px' }}>
+        <Confirm
+          open={showDeleteConfirm}
+          content="Are you sure to delete this user?"
+          onCancel={this.handleCancel}
+          onConfirm={this.handleConfirm}
+        />
+        <Dimmer active={loading}>
+          <Loader />
+        </Dimmer>
+        <Header as="h2" content="Users" textAlign="center" />
         <Table celled>
           <Table.Header>
             <Table.Row>
+              <Table.HeaderCell>No</Table.HeaderCell>
               <Table.HeaderCell>Name</Table.HeaderCell>
               <Table.HeaderCell>Email</Table.HeaderCell>
               <Table.HeaderCell>Role</Table.HeaderCell>
@@ -100,9 +128,9 @@ class UsersPage extends Component {
 
           <Table.Body>{this.renderUsers()}</Table.Body>
 
-          {/* <Table.Footer>
+          <Table.Footer>
             <Table.Row>
-              <Table.HeaderCell colSpan="4">
+              <Table.HeaderCell colSpan="5">
                 <Pagination
                   total={users.length}
                   currentPage={page}
@@ -111,9 +139,9 @@ class UsersPage extends Component {
                 />
               </Table.HeaderCell>
             </Table.Row>
-          </Table.Footer> */}
+          </Table.Footer>
         </Table>
-      </div>
+      </Container>
     );
   }
 }
@@ -121,10 +149,12 @@ class UsersPage extends Component {
 const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectCurrentUser(),
   users: makeSelectUserList(),
+  loading: makeSelectUserListLoading(),
 });
 
 const mapDispatchToProps = {
   userListRequest,
+  userDelete: userDeleteRequest,
 };
 
 const withConnect = connect(
@@ -132,11 +162,11 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withReducer = injectReducer({ key: 'app', reducer });
-const withSaga = injectSaga({ key: 'app', saga });
+// const withReducer = injectReducer({ key: 'app', reducer });
+// const withSaga = injectSaga({ key: 'app', saga });
 
 export default compose(
   withConnect,
-  withReducer,
-  withSaga,
+  // withReducer,
+  // withSaga,
 )(UsersPage);

@@ -19,31 +19,31 @@ const makeSelectCurrentUser = () =>
 const makeSelectLoading = () =>
   createSelector(
     selectGlobal,
-    globalState => globalState.get('loading'),
+    globalState => globalState.loading,
   );
 
 const makeSelectPersisting = () =>
   createSelector(
     selectGlobal,
-    globalState => globalState.get('persisted'),
+    globalState => globalState.persisted,
   );
 
 const makeSelectPersistLoaded = () =>
   createSelector(
     selectGlobal,
-    globalState => globalState.get('persistLoaded'),
+    globalState => globalState.persistLoaded,
   );
 
 const makeSelectNotification = () =>
   createSelector(
     selectGlobal,
-    globalState => globalState.get('notification'),
+    globalState => globalState.notification,
   );
 
 const makeSelectLocation = () =>
   createSelector(
     selectRoute,
-    routeState => routeState.get('location').toJS(),
+    routeState => routeState.location,
   );
 
 export {
