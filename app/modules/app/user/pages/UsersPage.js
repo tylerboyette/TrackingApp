@@ -15,6 +15,7 @@ import {
 import reducer from '../../redux/reducer';
 import saga from '../../redux/saga';
 import Pagination from 'components/Pagination';
+import PageSize from 'components/PageSize';
 import {
   Table,
   Header,
@@ -41,6 +42,9 @@ class UsersPage extends Component {
   }
   onChangePage = page => {
     this.setState({ page });
+  };
+  onChangePageSize = size => {
+    this.setState({ pageSize: size, page: 1 });
   };
 
   onRemove = deleteId => () => {
@@ -136,6 +140,10 @@ class UsersPage extends Component {
                   currentPage={page}
                   onChange={this.onChangePage}
                   perPage={pageSize}
+                />
+                <PageSize
+                  onChangeSize={this.onChangePageSize}
+                  size={pageSize}
                 />
               </Table.HeaderCell>
             </Table.Row>
