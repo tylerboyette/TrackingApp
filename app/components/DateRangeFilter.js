@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import { Form, Grid } from 'semantic-ui-react';
+import 'react-datepicker/dist/react-datepicker.css';
 
 class DateFilter extends Component {
   render() {
@@ -14,8 +15,8 @@ class DateFilter extends Component {
               <label>From</label>
               <DatePicker
                 showTimeSelect={false}
-                selected={moment(from)}
-                onChange={(val) => onChange('from', val)}
+                selected={from}
+                onChange={val => onChange('from', val)}
               />
             </Form.Field>
           </Grid.Column>
@@ -24,8 +25,8 @@ class DateFilter extends Component {
               <label>To</label>
               <DatePicker
                 showTimeSelect={false}
-                selected={moment(to)}
-                onChange={(val) => onChange('to', val)}
+                selected={to}
+                onChange={val => onChange('to', val)}
               />
             </Form.Field>
           </Grid.Column>
