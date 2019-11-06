@@ -57,7 +57,6 @@ export default function request(
   let headers = {
     'content-type': 'application/json',
   };
-
   if (data && data.header_type) {
     headers = {};
   }
