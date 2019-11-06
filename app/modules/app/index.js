@@ -28,9 +28,10 @@ import Dashboard from './dashboard';
 import UsersPage from './user/pages/UsersPage';
 import UserEditPage from './user/pages/UserEditPage';
 
-// import EntriesPage from './entry/pages/EntriesPage';
-// import WeeklyReport from './entry/pages/ReportPage';
-// import EntryEditPage from './entry/pages/EntryEditPage';
+import EntriesPage from './entry/pages/EntriesPage';
+import WeeklyReport from './entry/pages/ReportPage';
+import EntryEditPage from './entry/pages/EntryEditPage';
+import './styles.scss';
 
 class App extends Component {
   adminRoutes() {
@@ -39,6 +40,9 @@ class App extends Component {
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/users" component={UsersPage} />
         <Route exact path="/users/:id" component={UserEditPage} /> }
+        <Route exact path="/entries" component={EntriesPage} />
+        <Route exact path="/entries/:id" component={EntryEditPage} />
+        <Route exact path="/report" component={WeeklyReport} />
         <Route render={() => <Redirect to="/" />} />
       </Switch>
     );
@@ -50,6 +54,7 @@ class App extends Component {
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/users" component={UsersPage} />
         <Route exact path="/users/:id" component={UserEditPage} /> }
+        <Route exact path="/entries" component={EntriesPage} />
         <Route render={() => <Redirect to="/" />} />
       </Switch>
     );
@@ -71,7 +76,7 @@ class App extends Component {
       <div className="main-app">
         <TopBar />
         <Notification />
-        <Container className="app-container">
+        <Container className="app-container main-app-container">
           {this[`${currentUser.role}Routes`]()}
         </Container>
       </div>
