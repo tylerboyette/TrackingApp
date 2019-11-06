@@ -83,7 +83,7 @@ class UserPage extends Component {
     ];
 
     return (
-      <Container fluid style={{ marginTop: '40px' }}>
+      <Container fluid className="main-app-container">
         <Dimmer active={loading}>
           <Loader />
         </Dimmer>

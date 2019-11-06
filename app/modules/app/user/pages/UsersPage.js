@@ -7,13 +7,6 @@ import { makeSelectCurrentUser } from 'containers/App/selectors';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 
-import { userListRequest, userDeleteRequest } from '../redux/actions';
-import {
-  makeSelectUserList,
-  makeSelectUserListLoading,
-} from '../redux/selectors';
-import reducer from '../../redux/reducer';
-import saga from '../../redux/saga';
 import Pagination from 'components/Pagination';
 import PageSize from 'components/PageSize';
 import {
@@ -25,6 +18,13 @@ import {
   Button,
   Confirm,
 } from 'semantic-ui-react';
+import { userListRequest, userDeleteRequest } from '../redux/actions';
+import {
+  makeSelectUserList,
+  makeSelectUserListLoading,
+} from '../redux/selectors';
+import reducer from '../../redux/reducer';
+import saga from '../../redux/saga';
 
 class UsersPage extends Component {
   constructor(...args) {
@@ -40,9 +40,11 @@ class UsersPage extends Component {
   componentWillMount() {
     this.props.userListRequest();
   }
+
   onChangePage = page => {
     this.setState({ page });
   };
+
   onChangePageSize = size => {
     this.setState({ pageSize: size, page: 1 });
   };
@@ -55,6 +57,7 @@ class UsersPage extends Component {
     this.props.userDelete(this.state.deleteId);
     this.setState({ showDeleteConfirm: false });
   };
+
   renderUsers = () => {
     const { users } = this.props;
     const { page, pageSize } = this.state;
@@ -108,7 +111,7 @@ class UsersPage extends Component {
     const { users, loading } = this.props;
     const { page, pageSize, showDeleteConfirm } = this.state;
     return (
-      <Container style={{ marginTop: '40px' }}>
+      <Container className="main-app-container">
         <Confirm
           open={showDeleteConfirm}
           content="Are you sure to delete this user?"
