@@ -44,11 +44,9 @@ function list(req, res, next) {
 }
 
 function remove(req, res, next) {
-  req.entry
-    .remove(() => {
-      res.json(req.entry);
-    })
-    .catch(next);
+  req.entry.remove(() => {
+    res.json(req.entry);
+  });
 }
 
 function weeklyReport(req, res) {
