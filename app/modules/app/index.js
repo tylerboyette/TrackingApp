@@ -54,7 +54,6 @@ class App extends Component {
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/users" component={UsersPage} />
         <Route exact path="/users/:id" component={UserEditPage} /> }
-        <Route exact path="/entries" component={EntriesPage} />
         <Route render={() => <Redirect to="/" />} />
       </Switch>
     );
@@ -64,6 +63,9 @@ class App extends Component {
     return (
       <Switch>
         <Route exact path="/" component={Dashboard} />
+        <Route exact path="/entries" component={EntriesPage} />
+        <Route exact path="/report" component={WeeklyReport} />
+        <Route exact path="/entries/:id" component={EntryEditPage} />
 
         <Route render={() => <Redirect to="/" />} />
       </Switch>

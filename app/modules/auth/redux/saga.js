@@ -1,6 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 // import history from 'browserHistory';
+
 import * as CONSTANTS from './constants';
 import {
   loginSuccess,
@@ -22,8 +23,7 @@ export function* signupRequest(action) {
   try {
     const data = yield call(request, 'auth/signup', 'POST', action.data);
     yield put(signupSuccess(data));
-    // notify.success('Your account has been created');
-    // history.push('/login');
+    notify.success('Your account has been created');
   } catch (err) {
     yield put(signupError(err));
   }

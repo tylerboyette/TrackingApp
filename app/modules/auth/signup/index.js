@@ -28,7 +28,6 @@ class SignupPage extends Component {
     this.props.signupRequest({
       body: { email, firstName, lastName, password },
       success: () => {
-        notify.success('Your account has been created');
         this.props.history.push('/login');
       },
       failure: () => {},
