@@ -8,6 +8,6 @@ router.use(userCtrl.getProfile);
 router
   .route('/me')
   .get(userCtrl.read)
-  .post(userCtrl.update);
+  .put(userCtrl.updateProfile);
 
 module.exports = router;

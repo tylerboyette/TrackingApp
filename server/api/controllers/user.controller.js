@@ -1,5 +1,7 @@
+const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 const ROLES = require('../constants/role');
+const config = require('../../config');
 
 function create(req, res, next) {
   const user = new User({
@@ -44,6 +46,47 @@ function update(req, res, next) {
     .catch(next);
 }
 
+function updateProfile(req, res, next) {
+  Object.assign(req.userModel, {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+  });
+
+  if (req.body.password) {
+    req.userModel.password = req.body.password;
+  }
+
+  if (req.user.role === ROLES.ADMIN && req.body.role) {
+    req.userModel.role = req.body.role;
+  }
+
+  req.userModel
+    .save()
+    .then(updatedUser => {
+      const token = jwt.sign(
+        {
+          _id: updatedUser._id, // eslint-disable-line
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          email: updatedUser.email,
+          role: updatedUser.role,
+        },
+        config.jwtSecret,
+        { expiresIn: config.jwtExpires },
+      );
+      res.json({
+        _id: updatedUser._id, // eslint-disable-line
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        token,
+      });
+    })
+    .catch(next);
+}
+
 function read(req, res) {
   res.json(req.userModel);
 }
@@ -61,7 +104,7 @@ function list(req, res, next) {
     .catch(next);
 }
 
-function remove(req, res, next) {
+function remove(req, res) {
   req.userModel.remove(() => {
     res.json(req.userModel);
   });
@@ -103,4 +146,5 @@ module.exports = {
   remove,
   getUserByID,
   getProfile,
+  updateProfile,
 };

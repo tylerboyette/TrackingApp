@@ -17,3 +17,7 @@ export const USER_DELETE_ERROR = 'app/user/delete/error';
 // form
 export const LOAD_NEW_USER = 'app/user/load_new';
 export const UPDATE_USER_FIELD = 'app/user/update_field';
+
+export const SAVE_PROFILE_REQUEST = 'app/user/profile/request';
+export const SAVE_PROFILE_SUCCESS = 'app/user/profile/success';
+export const SAVE_PROFILE_ERROR = 'app/user/profile/error';

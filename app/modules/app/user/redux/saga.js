@@ -11,11 +11,13 @@ import {
   userDeleteError,
   userSaveSuccess,
   userSaveError,
+  profileSaveSuccess,
+  profileSaveError,
 } from './actions';
 
 import { selectUser } from './selectors';
 
-export function* userListRequest(action) {
+export function* userListRequest() {
   try {
     const data = yield call(request, 'users', 'GET', null, true);
     yield put(userListSuccess(data));
@@ -52,7 +54,7 @@ export function* userSaveRequest(action) {
     const state = yield select();
     const user = selectUser(state);
     const requestData = user.user.data;
-    const id = user.user.id;
+    const { id } = user.user;
     let responseData = null;
     console.log(action);
     if (id === 'new') {
@@ -89,10 +91,30 @@ export function* userSaveRequest(action) {
     yield put(userSaveError(err));
   }
 }
+export function* saveProfile(action) {
+  try {
+    const data = yield call(
+      request,
+      `profile/me`,
+      'PUT',
+      {
+        body: action.data.body,
+      },
+      true,
+    );
+
+    yield put(profileSaveSuccess(data));
+    notify.success('Profile is updated');
+  } catch (err) {
+    yield put(profileSaveError(err));
+    notify.err('Error', err);
+  }
+}
 
 export default function* userSaga() {
   yield takeLatest(CONSTANTS.USER_LIST_REQUEST, userListRequest);
   yield takeLatest(CONSTANTS.USER_LOAD_REQUEST, userLoadRequest);
   yield takeLatest(CONSTANTS.USER_SAVE_REQUEST, userSaveRequest);
   yield takeLatest(CONSTANTS.USER_DELETE_REQUEST, userDeleteRequest);
+  yield takeLatest(CONSTANTS.SAVE_PROFILE_REQUEST, saveProfile);
 }

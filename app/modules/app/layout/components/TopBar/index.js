@@ -7,7 +7,7 @@ import { Menu, Dropdown, Container } from 'semantic-ui-react';
 import { makeSelectCurrentUser } from 'containers/App/selectors';
 import { logout } from 'modules/auth/redux/actions';
 
-// import './style.scss';
+import './style.scss';
 
 class TopBar extends Component {
   render() {
@@ -45,12 +45,13 @@ class TopBar extends Component {
               </Dropdown.Menu>
             </Dropdown>
           )}
-          <Menu.Item as={Link} header to="/upload">
-            Upload
-          </Menu.Item>
+
           <Menu.Menu position="right">
             <Dropdown item simple text={`Hello ${currentUser.firstName}`}>
               <Dropdown.Menu>
+                <Dropdown.Item as={Link} to="/profile">
+                  Profile
+                </Dropdown.Item>
                 <Dropdown.Item onClick={logoutAction}>Log Out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

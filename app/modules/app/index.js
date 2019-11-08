@@ -27,6 +27,7 @@ import TopBar from './layout/components/TopBar';
 import Dashboard from './dashboard';
 import UsersPage from './user/pages/UsersPage';
 import UserEditPage from './user/pages/UserEditPage';
+import ProFilePage from './user/pages/ProFilePage';
 
 import EntriesPage from './entry/pages/EntriesPage';
 import WeeklyReport from './entry/pages/ReportPage';
@@ -38,6 +39,7 @@ class App extends Component {
     return (
       <Switch>
         <Route exact path="/" component={Dashboard} />
+        <Route exact path="/profile" component={ProFilePage} />
         <Route exact path="/users" component={UsersPage} />
         <Route exact path="/users/:id" component={UserEditPage} /> }
         <Route exact path="/entries" component={EntriesPage} />
@@ -52,6 +54,7 @@ class App extends Component {
     return (
       <Switch>
         <Route exact path="/" component={Dashboard} />
+        <Route exact path="/profile" component={ProFilePage} />
         <Route exact path="/users" component={UsersPage} />
         <Route exact path="/users/:id" component={UserEditPage} /> }
         <Route render={() => <Redirect to="/" />} />
@@ -63,6 +66,7 @@ class App extends Component {
     return (
       <Switch>
         <Route exact path="/" component={Dashboard} />
+        <Route exact path="/profile" component={ProFilePage} />
         <Route exact path="/entries" component={EntriesPage} />
         <Route exact path="/report" component={WeeklyReport} />
         <Route exact path="/entries/:id" component={EntryEditPage} />

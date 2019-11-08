@@ -97,3 +97,24 @@ export function updateUserField(field, value) {
     value,
   };
 }
+
+export function profileSaveRequest(data) {
+  return {
+    type: CONSTANTS.SAVE_PROFILE_REQUEST,
+    data,
+  };
+}
+
+export function profileSaveSuccess(data) {
+  return {
+    type: CONSTANTS.SAVE_PROFILE_SUCCESS,
+    data,
+  };
+}
+
+export function profileSaveError(data) {
+  return {
+    type: CONSTANTS.SAVE_PROFILE_ERROR,
+    data,
+  };
+}
