@@ -5,11 +5,24 @@ import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { Header, Segment, Container, Form, Button } from 'semantic-ui-react';
 import { makeSelectCurrentUser } from 'containers/App/selectors';
+
+import { FilePond, registerPlugin } from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
+import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import { profileSaveRequest } from '../redux/actions';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+// Register the plugins
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = { user: this.props.currentUser };
+    this.state = {
+      user: this.props.currentUser,
+      files: [],
+    };
   }
 
   onUpdateField = field => evt => {
@@ -20,22 +33,43 @@ class Profile extends Component {
   };
 
   onSubmit = () => {
-    const { user } = this.state;
+    const { user, files } = this.state;
     const { saveProfile } = this.props;
-    this.props.saveProfile({
-      body: user,
+    const fd = new FormData();
+    if (files.length) {
+      fd.append('file', files[0]);
+    }
+    fd.append('data', JSON.stringify(user));
+    saveProfile({
+      body: fd,
+      header_type: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  };
+
+  setFiles = fileItems => {
+    this.setState({
+      files: fileItems.map(fileItem => fileItem.file),
     });
   };
 
   render() {
-    const { user } = this.state;
+    const { user, files } = this.state;
 
     return (
       <Container fluid className="main-app-container">
         <Header as="h2" content="Profile Settings" textAlign="center" />
+
         <Form onSubmit={this.onSubmit}>
           <Segment>
             <Header as="h4" content="Basic Info" dividing />
+            <FilePond
+              acceptedFileTypes={['image/png']}
+              ref={ref => (this.pond = ref)}
+              files={files}
+              onupdatefiles={this.setFiles}
+            />
             <Form.Input
               label="First Name"
               required

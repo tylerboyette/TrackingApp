@@ -92,22 +92,15 @@ export function* userSaveRequest(action) {
   }
 }
 export function* saveProfile(action) {
+  console.log('action', action);
   try {
-    const data = yield call(
-      request,
-      `profile/me`,
-      'PUT',
-      {
-        body: action.data.body,
-      },
-      true,
-    );
+    const data = yield call(request, `profile/me`, 'POST', action.data, true);
 
     yield put(profileSaveSuccess(data));
     notify.success('Profile is updated');
   } catch (err) {
     yield put(profileSaveError(err));
-    notify.err('Error', err);
+    notify.error('Error', err);
   }
 }
 

@@ -93,7 +93,6 @@ export default function request(
     }
     headers.Authorization = `Bearer ${token}`;
   }
-
   return fetch(requestUrl, {
     ...options,
     headers,
