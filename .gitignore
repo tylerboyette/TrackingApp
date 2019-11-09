@@ -2,6 +2,7 @@
 coverage
 build
 node_modules
+server/public
 stats.json
 
 # Cruft
