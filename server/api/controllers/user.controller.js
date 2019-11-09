@@ -1,4 +1,7 @@
 const jwt = require('jsonwebtoken');
+const formidable = require('formidable');
+const fs = require('fs');
+const path = require('path');
 const User = require('../models/user.model');
 const ROLES = require('../constants/role');
 const config = require('../../config');
@@ -47,44 +50,56 @@ function update(req, res, next) {
 }
 
 function updateProfile(req, res, next) {
-  Object.assign(req.userModel, {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
+  const form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files) {});
+  form.uploadDir = `${process.cwd()}/server/public/img`;
+
+  form.on('file', function(field, file) {
+    const fileName = `${Date.now()}__${file.name}`;
+    req.userModel.imageUrl = `/public/img/${fileName}`;
+    fs.rename(file.path, path.join(form.uploadDir, fileName), function(err) {});
   });
 
-  if (req.body.password) {
-    req.userModel.password = req.body.password;
-  }
+  form.on('field', function(name, value) {
+    const data = JSON.parse(value);
+    Object.assign(req.userModel, {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+    });
 
-  if (req.user.role === ROLES.ADMIN && req.body.role) {
-    req.userModel.role = req.body.role;
-  }
+    if (data.password) {
+      req.userModel.password = data.password;
+    }
+  });
 
-  req.userModel
-    .save()
-    .then(updatedUser => {
-      const token = jwt.sign(
-        {
+  form.on('end', function() {
+    req.userModel
+      .save()
+      .then(updatedUser => {
+        const token = jwt.sign(
+          {
+            _id: updatedUser._id, // eslint-disable-line
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName,
+            email: updatedUser.email,
+            role: updatedUser.role,
+          },
+          config.jwtSecret,
+          { expiresIn: config.jwtExpires },
+        );
+        res.json({
           _id: updatedUser._id, // eslint-disable-line
           firstName: updatedUser.firstName,
           lastName: updatedUser.lastName,
           email: updatedUser.email,
           role: updatedUser.role,
-        },
-        config.jwtSecret,
-        { expiresIn: config.jwtExpires },
-      );
-      res.json({
-        _id: updatedUser._id, // eslint-disable-line
-        firstName: updatedUser.firstName,
-        lastName: updatedUser.lastName,
-        email: updatedUser.email,
-        role: updatedUser.role,
-        token,
-      });
-    })
-    .catch(next);
+          imageUrl: updatedUser.imageUrl,
+          token,
+        });
+      })
+      .catch(next);
+  });
 }
 
 function read(req, res) {

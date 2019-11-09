@@ -2,7 +2,7 @@
 
 const express = require('express');
 const logger = require('./logger');
-
+const bodyParser = require('body-parser');
 const argv = require('./argv');
 const port = require('./port');
 const frontendSetup = require('./middlewares/frontendMiddleware');
@@ -14,7 +14,10 @@ const ngrok =
     : false;
 const { resolve } = require('path');
 const app = express();
-
+const path = require('path');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use('/public', express.static(path.join(__dirname, 'public')));
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);
 backendSetup(app);

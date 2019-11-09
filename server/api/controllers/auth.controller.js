@@ -4,7 +4,7 @@ const User = require('../models/user.model');
 
 function login(req, res, next) {
   User.findOne({ email: req.body.email })
-    .select('_id password email firstName lastName role')
+    .select('_id password email firstName lastName role imageUrl')
     .exec()
     .then(user => {
       if (!user) {
@@ -34,6 +34,7 @@ function login(req, res, next) {
             lastName: user.lastName,
             email: user.email,
             role: user.role,
+            imageUrl: user.imageUrl,
             token,
           });
         })

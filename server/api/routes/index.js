@@ -9,8 +9,6 @@ const entryRoute = require('./entry.route');
 const userRoute = require('./user.route');
 const profileRoute = require('./profile.route');
 
-const upload = multer({ dest: 'uploads/' });
-
 const router = express.Router();
 const authMiddleware = expressJwt({ secret: config.jwtSecret });
 

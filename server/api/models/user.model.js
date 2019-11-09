@@ -10,6 +10,7 @@ const userSchema = new Schema({
   lastName: { type: String, required: true, trim: true, default: '' },
   email: { type: String, unique: true, required: true, trim: true },
   password: { type: String, select: false },
+  imageUrl: { type: String },
   role: {
     type: String,
     required: true,
