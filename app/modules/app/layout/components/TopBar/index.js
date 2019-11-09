@@ -6,13 +6,22 @@ import { Link } from 'react-router-dom';
 import { Menu, Dropdown, Container } from 'semantic-ui-react';
 import { makeSelectCurrentUser } from 'containers/App/selectors';
 import { logout } from 'modules/auth/redux/actions';
-import { UserAvatar } from 'react-user-avatar';
+import UserAvatar from 'react-user-avatar';
 
 import './style.scss';
 
 class TopBar extends Component {
   render() {
     const { currentUser, logout: logoutAction } = this.props;
+    const trigger = (
+      <span style={{ padding: '-10px' }}>
+        <UserAvatar
+          size="35"
+          name="Will Binns-Smith"
+          src={currentUser.imageUrl}
+        />
+      </span>
+    );
     return (
       <Menu fixed="top" inverted>
         <Container>
@@ -47,12 +56,14 @@ class TopBar extends Component {
             </Dropdown>
           )}
           <Menu.Menu position="right">
-            <Dropdown item simple text={`Hello ${currentUser.firstName}`}>
+            <Dropdown item simple trigger={trigger}>
               <Dropdown.Menu>
-                <Dropdown.Item as={Link} to="/profile">
+                <Dropdown.Item as={Link} to="/profile" icon="settings">
                   Profile
                 </Dropdown.Item>
-                <Dropdown.Item onClick={logoutAction}>Log Out</Dropdown.Item>
+                <Dropdown.Item onClick={logoutAction} icon="sign out">
+                  Log Out
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Menu>
