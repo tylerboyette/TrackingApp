@@ -51,29 +51,39 @@ function update(req, res, next) {
 
 function updateProfile(req, res, next) {
   const form = new formidable.IncomingForm();
-  form.parse(req, function(err, fields, files) {});
   form.uploadDir = `${process.cwd()}/server/public/img`;
+  const fileCropName = `/public/img/crop_${Date.now()}.jpg`;
 
+  form.parse(req, function(err, fields, files) {});
   form.on('file', function(field, file) {
+    filename = file.name;
     const fileName = `${Date.now()}__${file.name}`;
     req.userModel.imageUrl = `/public/img/${fileName}`;
     fs.rename(file.path, path.join(form.uploadDir, fileName), function(err) {});
   });
 
   form.on('field', function(name, value) {
-    const data = JSON.parse(value);
-    Object.assign(req.userModel, {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-    });
-
-    if (data.password) {
-      req.userModel.password = data.password;
+    if (name == 'preview') {
+      const filePath = `${process.cwd()}/server/${fileCropName}`;
+      const base64Image = value.split(';base64,').pop();
+      fs.writeFile(filePath, base64Image, { encoding: 'base64' }, function(
+        err,
+      ) {});
+    } else {
+      const data = JSON.parse(value);
+      Object.assign(req.userModel, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+      });
+      if (data.password) {
+        req.userModel.password = data.password;
+      }
     }
   });
 
   form.on('end', function() {
+    req.userModel.avatar = fileCropName;
     req.userModel
       .save()
       .then(updatedUser => {
@@ -95,6 +105,7 @@ function updateProfile(req, res, next) {
           email: updatedUser.email,
           role: updatedUser.role,
           imageUrl: updatedUser.imageUrl,
+          avatar: updatedUser.avatar,
           token,
         });
       })

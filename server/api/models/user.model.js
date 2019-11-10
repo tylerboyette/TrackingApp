@@ -11,6 +11,7 @@ const userSchema = new Schema({
   email: { type: String, unique: true, required: true, trim: true },
   password: { type: String, select: false },
   imageUrl: { type: String },
+  avatar: { type: String },
   role: {
     type: String,
     required: true,
