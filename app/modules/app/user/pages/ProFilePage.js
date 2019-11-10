@@ -5,16 +5,18 @@ import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { Header, Segment, Container, Form, Button } from 'semantic-ui-react';
 import { makeSelectCurrentUser } from 'containers/App/selectors';
-
-import { FilePond, registerPlugin } from 'react-filepond';
-import 'filepond/dist/filepond.min.css';
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import Avatar from 'react-avatar-edit';
 import { profileSaveRequest } from '../redux/actions';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
-// Register the plugins
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+// import { FilePond, registerPlugin } from 'react-filepond';
+// import 'filepond/dist/filepond.min.css';
+// import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
+// import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+
+// import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+// // Register the plugins
+// registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 class Profile extends Component {
   constructor(props) {
@@ -22,8 +24,17 @@ class Profile extends Component {
     this.state = {
       user: this.props.currentUser,
       files: [],
+      preview: null,
     };
   }
+
+  onClose = () => {
+    this.setState({ preview: null });
+  };
+
+  onCrop = preview => {
+    this.setState({ preview });
+  };
 
   onUpdateField = field => evt => {
     const { user } = this.state;
@@ -33,13 +44,14 @@ class Profile extends Component {
   };
 
   onSubmit = () => {
-    const { user, files } = this.state;
+    const { user, files, preview } = this.state;
     const { saveProfile } = this.props;
     const fd = new FormData();
     if (files.length) {
       fd.append('file', files[0]);
     }
     fd.append('data', JSON.stringify(user));
+    if (preview) fd.append('preview', preview);
     saveProfile({
       body: fd,
       header_type: {
@@ -48,10 +60,15 @@ class Profile extends Component {
     });
   };
 
-  setFiles = fileItems => {
-    this.setState({
-      files: fileItems.map(fileItem => fileItem.file),
-    });
+  // setFiles = fileItems => {
+  //   this.setState({
+  //     files: fileItems.map(fileItem => fileItem.file),
+  //   });
+  // };
+
+  onBeforeFileLoad = elem => {
+    console.log(elem.target.files);
+    this.setState({ files: elem.target.files });
   };
 
   render() {
@@ -64,12 +81,24 @@ class Profile extends Component {
         <Form onSubmit={this.onSubmit}>
           <Segment>
             <Header as="h4" content="Basic Info" dividing />
-            <FilePond
-              acceptedFileTypes={['image/png']}
-              ref={ref => (this.pond = ref)}
-              files={files}
-              onupdatefiles={this.setFiles}
-            />
+            <div
+              style={{
+                width: '100%',
+                height: '200px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Avatar
+                width={200}
+                height={200}
+                onCrop={this.onCrop}
+                onClose={this.onClose}
+                onBeforeFileLoad={this.onBeforeFileLoad}
+                src={user.imageUrl}
+              />
+            </div>
             <Form.Input
               label="First Name"
               required

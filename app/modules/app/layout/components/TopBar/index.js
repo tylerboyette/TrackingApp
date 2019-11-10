@@ -17,8 +17,8 @@ class TopBar extends Component {
       <span style={{ padding: '-10px' }}>
         <UserAvatar
           size="35"
-          name="Will Binns-Smith"
-          src={currentUser.imageUrl}
+          name={currentUser.firstName}
+          src={currentUser.avatar}
         />
       </span>
     );
@@ -58,12 +58,18 @@ class TopBar extends Component {
           <Menu.Menu position="right">
             <Dropdown item simple trigger={trigger}>
               <Dropdown.Menu>
-                <Dropdown.Item as={Link} to="/profile" icon="settings">
-                  Profile
+                <Dropdown.Item>
+                  <>
+                    <img src={currentUser.avatar} className="small-avatar" />
+                    <span style={{ marginTop: '5px!important' }}>
+                      {currentUser.firstName}
+                    </span>
+                  </>
                 </Dropdown.Item>
-                <Dropdown.Item onClick={logoutAction} icon="sign out">
-                  Log Out
+                <Dropdown.Item as={Link} to="/profile">
+                  Settings
                 </Dropdown.Item>
+                <Dropdown.Item onClick={logoutAction}>Log Out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Menu>
