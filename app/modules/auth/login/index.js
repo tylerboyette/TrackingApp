@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
-import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Segment, Icon } from 'semantic-ui-react';
 import { GoogleLogin } from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
 import { loginRequest, loginSocialRequest } from '../redux/actions';
 
 // import './style.scss';
@@ -50,6 +51,19 @@ class LoginPage extends Component {
     console.log('failure', response);
   };
 
+  responseFacebook = response => {
+    const Names = response.name.split(' ');
+    const data = {
+      firstName: Names[0],
+      lastName: Names[1],
+      avatar: response.picture.data.url,
+      email: response.email,
+    };
+    this.props.socialLogin({
+      body: data,
+    });
+  };
+
   render() {
     const { email, password } = this.state;
     return (
@@ -66,6 +80,17 @@ class LoginPage extends Component {
                   buttonText="Login with Google"
                   onSuccess={this.googleSuccessResponse}
                   onFailure={this.googleFailureResponse}
+                  theme="dark"
+                />
+                &nbsp;&nbsp;&nbsp;
+                <FacebookLogin
+                  size="small"
+                  icon={<Icon name="facebook" />}
+                  appId="2373722572876986"
+                  autoLoad={false}
+                  fields="name,email,picture"
+                  callback={this.responseFacebook}
+                  buttonStyle={{ fontSize: '14px', fontWeight: '500' }}
                 />
               </Form.Field>
               <Form.Input
