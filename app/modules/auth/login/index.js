@@ -60,13 +60,14 @@ class LoginPage extends Component {
           </Header>
           <Form size="large">
             <Segment stacked>
-              <GoogleLogin
-                clientId="437609978470-jdulo18nbgs7nv7d7f8nf0945j3f534m.apps.googleusercontent.com"
-                buttonText="Login with Google"
-                onSuccess={this.googleSuccessResponse}
-                onFailure={this.googleFailureResponse}
-              />
-              <br />
+              <Form.Field>
+                <GoogleLogin
+                  clientId="437609978470-jdulo18nbgs7nv7d7f8nf0945j3f534m.apps.googleusercontent.com"
+                  buttonText="Login with Google"
+                  onSuccess={this.googleSuccessResponse}
+                  onFailure={this.googleFailureResponse}
+                />
+              </Form.Field>
               <Form.Input
                 fluid
                 value={email}
