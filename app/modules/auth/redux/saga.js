@@ -8,6 +8,8 @@ import {
   loginError,
   signupSuccess,
   signupError,
+  loginSocialSuccess,
+  loginSocialError,
 } from './actions';
 
 export function* loginRequest(action) {
@@ -16,6 +18,14 @@ export function* loginRequest(action) {
     yield put(loginSuccess(data));
   } catch (err) {
     yield put(loginError(err));
+  }
+}
+export function* loginSocialRequest(action) {
+  try {
+    const data = yield call(request, 'auth/login-social', 'POST', action.data);
+    yield put(loginSocialSuccess(data));
+  } catch (err) {
+    yield put(loginSocialError(err));
   }
 }
 
@@ -31,5 +41,6 @@ export function* signupRequest(action) {
 
 export default function* authSaga() {
   yield takeLatest(CONSTANTS.LOGIN_REQUEST, loginRequest);
+  yield takeLatest(CONSTANTS.LOGIN_SOCIAL_REQUEST, loginSocialRequest);
   yield takeLatest(CONSTANTS.SIGNUP_REQUEST, signupRequest);
 }

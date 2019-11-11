@@ -4,7 +4,8 @@ import { compose } from 'redux';
 import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react';
-import { loginRequest } from '../redux/actions';
+import { GoogleLogin } from 'react-google-login';
+import { loginRequest, loginSocialRequest } from '../redux/actions';
 
 // import './style.scss';
 
@@ -31,6 +32,24 @@ class LoginPage extends Component {
     });
   };
 
+  googleSuccessResponse = response => {
+    console.log('success', response);
+    const data = {
+      firstName: response.w3.ofa,
+      lastName: response.w3.wea,
+      avatar: response.w3.Paa,
+      email: response.w3.U3,
+      password: ' ',
+    };
+    this.props.socialLogin({
+      body: data,
+    });
+  };
+
+  googleFailureResponse = response => {
+    console.log('failure', response);
+  };
+
   render() {
     const { email, password } = this.state;
     return (
@@ -41,6 +60,13 @@ class LoginPage extends Component {
           </Header>
           <Form size="large">
             <Segment stacked>
+              <GoogleLogin
+                clientId="437609978470-jdulo18nbgs7nv7d7f8nf0945j3f534m.apps.googleusercontent.com"
+                buttonText="Login with Google"
+                onSuccess={this.googleSuccessResponse}
+                onFailure={this.googleFailureResponse}
+              />
+              <br />
               <Form.Input
                 fluid
                 value={email}
@@ -76,6 +102,7 @@ const mapStateToProps = createStructuredSelector({});
 
 const mapDispatchToProps = {
   loginRequest,
+  socialLogin: loginSocialRequest,
 };
 
 const withConnect = connect(

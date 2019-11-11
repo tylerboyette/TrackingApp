@@ -47,3 +47,24 @@ export function logout() {
     type: CONSTANTS.LOGOUT,
   };
 }
+
+export function loginSocialRequest(data) {
+  return {
+    type: CONSTANTS.LOGIN_SOCIAL_REQUEST,
+    data,
+  };
+}
+
+export function loginSocialSuccess(data) {
+  return {
+    type: CONSTANTS.LOGIN_SOCIAL_SUCCESS,
+    data,
+  };
+}
+
+export function loginSocialError(data) {
+  return {
+    type: CONSTANTS.LOGIN_SOCIAL_ERROR,
+    ...data,
+  };
+}

@@ -13,6 +13,10 @@ const authReducer = (state = initialState, action) =>
       case CONSTANTS.LOGIN_SUCCESS:
         draft.currentUser = action.data;
         break;
+      case CONSTANTS.LOGIN_SOCIAL_SUCCESS:
+        console.log('reducer', action);
+        draft.currentUser = action.data;
+        break;
       case CONSTANTS.LOGOUT:
         draft.currentUser = null;
         break;
