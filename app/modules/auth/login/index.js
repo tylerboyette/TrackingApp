@@ -8,7 +8,7 @@ import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { loginRequest, loginSocialRequest } from '../redux/actions';
 
-// import './style.scss';
+import './style.scss';
 
 class LoginPage extends Component {
   constructor(props) {
@@ -34,16 +34,16 @@ class LoginPage extends Component {
   };
 
   googleSuccessResponse = response => {
-    console.log('success', response);
-    const data = {
-      firstName: response.w3.ofa,
-      lastName: response.w3.wea,
-      avatar: response.w3.Paa,
-      email: response.w3.U3,
+    const profile = response.getBasicProfile();
+    const payload = {
+      firstName: profile.ofa,
+      lastName: profile.wea,
+      avatar: profile.getImageUrl(),
+      email: profile.getEmail(),
       password: ' ',
     };
     this.props.socialLogin({
-      body: data,
+      body: payload,
     });
   };
 
@@ -53,14 +53,14 @@ class LoginPage extends Component {
 
   responseFacebook = response => {
     const Names = response.name.split(' ');
-    const data = {
+    const paylod = {
       firstName: Names[0],
       lastName: Names[1],
       avatar: response.picture.data.url,
       email: response.email,
     };
     this.props.socialLogin({
-      body: data,
+      body: paylod,
     });
   };
 
@@ -80,7 +80,7 @@ class LoginPage extends Component {
                   buttonText="Login with Google"
                   onSuccess={this.googleSuccessResponse}
                   onFailure={this.googleFailureResponse}
-                  theme="dark"
+                  longTitle={false}
                 />
                 &nbsp;&nbsp;&nbsp;
                 <FacebookLogin
@@ -91,6 +91,7 @@ class LoginPage extends Component {
                   fields="name,email,picture"
                   callback={this.responseFacebook}
                   buttonStyle={{ fontSize: '14px', fontWeight: '500' }}
+                  cssClass="btnFacebook"
                 />
               </Form.Field>
               <Form.Input

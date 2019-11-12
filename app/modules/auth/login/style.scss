@@ -1,14 +1,51 @@
-@import '~styles/variables';
+// @import '~styles/variables';
 
-.page-login {
-  height: 100%;
+// .page-login {
+//   height: 100%;
+// }
+
+// .column-login {
+//   max-width: 450px;
+// }
+
+// .signup-link {
+//   display: block;
+//   margin-top: 10px;
+// }
+
+.btnFacebook {
+  width: 176px;
+  height: 40px;
+  border-radius: 4px;
+  background: #3b5998;
+  color: white;
+  border: 0px transparent;
+  text-align: center;
+  margin: 5px;
+  display: inline-block;
+}
+.btnGoogle {
+  margin: 5px;
+  width: 176px;
+  height: 40px;
+  border-radius: 4px;
+  background: #db3236 !important;
+  color: white;
+  border: 0px transparent;
+  text-align: center;
+}
+.btnGoogle:hover {
+  background: #db3236;
+  opacity: 0.6;
+}
+.btnFacebook:hover {
+  background: #3b5998;
+  opacity: 0.6;
 }
 
-.column-login {
-  max-width: 450px;
-}
-
-.signup-link {
-  display: block;
-  margin-top: 10px;
+@media only screen and (max-width: 399px) {
+  .btnFacebook,
+  .btnGoogle {
+    width: 100%;
+  }
 }
