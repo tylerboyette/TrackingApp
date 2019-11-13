@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -26,6 +27,7 @@ class LoginPage extends Component {
 
   onSubmit = () => {
     const { email, password } = this.state;
+    // eslint-disable-next-line react/prop-types
     this.props.loginRequest({
       body: { email, password },
       success: () => {},
@@ -48,6 +50,7 @@ class LoginPage extends Component {
   };
 
   googleFailureResponse = response => {
+    // eslint-disable-next-line no-console
     console.log('failure', response);
   };
 
@@ -76,7 +79,7 @@ class LoginPage extends Component {
             <Segment stacked>
               <Form.Field>
                 <GoogleLogin
-                  clientId="437609978470-jdulo18nbgs7nv7d7f8nf0945j3f534m.apps.googleusercontent.com"
+                  clientId="437609978470-2bgj48j2dr3l3j677iipm56dap9glptm.apps.googleusercontent.com"
                   buttonText="Login with Google"
                   onSuccess={this.googleSuccessResponse}
                   onFailure={this.googleFailureResponse}
@@ -86,7 +89,7 @@ class LoginPage extends Component {
                 <FacebookLogin
                   size="small"
                   icon={<Icon name="facebook" />}
-                  appId="2373722572876986"
+                  appId="2356125257980726"
                   autoLoad={false}
                   fields="name,email,picture"
                   callback={this.responseFacebook}

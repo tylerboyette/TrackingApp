@@ -1,16 +1,25 @@
+/* eslint-disable no-console */
+/* eslint-disable no-param-reassign */
 const jwt = require('jsonwebtoken');
 const config = require('../../config');
 const User = require('../models/user.model');
 
 function login(req, res, next) {
   User.findOne({ email: req.body.email })
-    .select('_id password email firstName lastName role imageUrl avatar')
+    .select(
+      '_id password email firstName lastName role imageUrl avatar isActived',
+    )
     .exec()
     .then(user => {
       if (!user) {
         return res
           .status(500)
           .json({ message: 'Email or password does not match' });
+      }
+      if (!user.isActived) {
+        return res
+          .status(500)
+          .json({ message: 'Please confirm your email address to login!' });
       }
 
       return user
@@ -128,8 +137,26 @@ function socialLogin(req, res, next) {
     });
 }
 
+function verifyEmail(req, res) {
+  try {
+    const { _id } = jwt.verify(req.body.data, config.jwtSecret);
+    console.log(_id);
+    User.findOne({ _id }).then(user => {
+      console.log('user found', user);
+      if (!user) res.json({ message: 'Can not find user!' });
+      else {
+        user.isActived = true;
+        user.save();
+        res.json({ message: 'Email is verified!' });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+}
 module.exports = {
   login,
   socialLogin,
   signup,
+  verifyEmail,
 };

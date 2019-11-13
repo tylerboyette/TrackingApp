@@ -68,3 +68,24 @@ export function loginSocialError(data) {
     ...data,
   };
 }
+
+export function emailVerifyRequest(data) {
+  return {
+    type: CONSTANTS.EMAIL_VERIFY_REQUEST,
+    data,
+  };
+}
+
+export function emailVerifySuccess(data) {
+  return {
+    type: CONSTANTS.EMAIL_VERIFY_SUCCESS,
+    data,
+  };
+}
+
+export function emailVerifyError(data) {
+  return {
+    type: CONSTANTS.EMAIL_VERIFY_ERROR,
+    ...data,
+  };
+}

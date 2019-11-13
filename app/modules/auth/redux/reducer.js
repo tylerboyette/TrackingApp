@@ -4,6 +4,7 @@ import { SAVE_PROFILE_SUCCESS } from '../../app/user/redux/constants';
 // The initial state of the App
 export const initialState = {
   currentUser: null,
+  message: null,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -21,6 +22,12 @@ const authReducer = (state = initialState, action) =>
         break;
       case SAVE_PROFILE_SUCCESS:
         draft.currentUser = action.data;
+        break;
+      case CONSTANTS.EMAIL_VERIFY_SUCCESS:
+        draft.message = action.data.message;
+        break;
+      case CONSTANTS.EMAIL_VERIFY_ERROR:
+        draft.message = action.data.message;
         break;
     }
   });
