@@ -1,3 +1,6 @@
+/* eslint-disable func-names */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-unused-vars */
 const jwt = require('jsonwebtoken');
 const formidable = require('formidable');
 const fs = require('fs');
@@ -56,14 +59,14 @@ function updateProfile(req, res, next) {
 
   form.parse(req, function(err, fields, files) {});
   form.on('file', function(field, file) {
-    filename = file.name;
+    const filename = file.name;
     const fileName = `${Date.now()}__${file.name}`;
     req.userModel.imageUrl = `/public/img/${fileName}`;
     fs.rename(file.path, path.join(form.uploadDir, fileName), function(err) {});
   });
 
   form.on('field', function(name, value) {
-    if (name == 'preview') {
+    if (name === 'preview') {
       const filePath = `${process.cwd()}/server/${fileCropName}`;
       const base64Image = value.split(';base64,').pop();
       fs.writeFile(filePath, base64Image, { encoding: 'base64' }, function(
@@ -106,6 +109,7 @@ function updateProfile(req, res, next) {
           role: updatedUser.role,
           imageUrl: updatedUser.imageUrl,
           avatar: updatedUser.avatar,
+          isActived: updatedUser.isActived,
           token,
         });
       })

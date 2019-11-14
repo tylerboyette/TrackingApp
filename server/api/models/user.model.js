@@ -77,7 +77,10 @@ userSchema.pre('save', function preSave(next) {
   }
 });
 userSchema.post('save', function emailVerification(item) {
-  if (this.email && (this.$locals.wasNew || this.isModified('email'))) {
+  if (
+    this.email &&
+    (this.$locals.wasNew || this.isModified('email') || !this.isActived)
+  ) {
     const token = jwt.sign(
       {
         _id: item._id, // eslint-disable-line
