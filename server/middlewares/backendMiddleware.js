@@ -6,6 +6,9 @@ const apiRoutes = require('../api/routes');
 
 module.exports = (app, cb) => {
   mongoose.Promise = global.Promise;
+  mongoose.set('useNewUrlParser', true);
+  mongoose.set('useCreateIndex', true);
+  mongoose.set('useUnifiedTopology', true);
   mongoose.connect(config.mongoURL, error => {
     if (error) {
       console.error('Please make sure Mongodb is installed and running!'); // eslint-disable-line no-console
