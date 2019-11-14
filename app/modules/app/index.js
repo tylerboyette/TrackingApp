@@ -84,10 +84,12 @@ class App extends Component {
     return (
       <div className="main-app">
         <TopBar />
-        <Notification />
-        <Container className="app-container main-app-container">
-          {this[`${currentUser.role}Routes`]()}
-        </Container>
+        <div style={{ marginTop: '70px' }}>
+          <Notification />
+          <Container className="app-container">
+            {this[`${currentUser.role}Routes`]()}
+          </Container>
+        </div>
       </div>
     );
   }

@@ -38,6 +38,7 @@ export function* loginSocialRequest(action) {
   try {
     const data = yield call(request, 'auth/login-social', 'POST', action.data);
     yield put(loginSocialSuccess(data));
+    if (!data.isActived) notify.info('Please verify your email address!');
   } catch (err) {
     yield put(loginSocialError(err));
   }

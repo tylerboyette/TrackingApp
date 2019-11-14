@@ -93,6 +93,7 @@ function socialLogin(req, res, next) {
         role: user.role,
         imageUrl: user.imageUrl,
         avatar: user.avatar,
+        isActived: user.isActived,
         token,
       });
     })
@@ -130,6 +131,7 @@ function socialLogin(req, res, next) {
             role: newUser.role,
             imageUrl: newUser.imageUrl,
             avatar: newUser.avatar,
+            isActived: newUser.isActived,
             token,
           });
         })

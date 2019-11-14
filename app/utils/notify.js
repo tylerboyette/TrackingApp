@@ -16,5 +16,8 @@ export default function initialize(store) {
     error(message, heading = 'Error') {
       showNotification(heading, message, 'error');
     },
+    info(message, heading = 'Info') {
+      showNotification(heading, message, 'info');
+    },
   };
 }
