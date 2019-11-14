@@ -94,14 +94,16 @@ userSchema.post('save', function emailVerification(item) {
         {
           to: item.email,
           subject: 'Confirm your email!',
-          html: `Hello, ${item.firstName} ${
+          html: `Hello, <b>${item.firstName} ${
             item.lastName
-          }! <br/>Please click this email to confirm your email. <br/><a href = "${url}">Confirm your Email</a>`,
+          }!</b> <br/>Please click this email to confirm your email. <br/><a href = "${url}">Confirm your Email</a><br/><span>Thanks</span>`,
         },
         (err, info) => {
           // eslint-disable-next-line no-console
           if (err) console.log('err', err);
-          console.log('Message sent', info);
+          else {
+            console.log('Message sent', info);
+          }
         },
       );
     } catch (error) {
