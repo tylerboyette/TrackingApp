@@ -5,7 +5,7 @@ import LoginPage from './login';
 import SignupPage from './signup';
 import EmailVerificationPage from './emailVerification';
 
-// import './style.scss';
+import './style.scss';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class Auth extends Component {
