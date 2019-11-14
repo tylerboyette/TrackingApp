@@ -8,7 +8,7 @@ import { Button, Form, Grid, Header, Segment, Icon } from 'semantic-ui-react';
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { loginRequest, loginSocialRequest } from '../redux/actions';
-
+import { GOOGLE_ID, FACEBOOK_ID } from '../config';
 import './style.scss';
 
 class LoginPage extends Component {
@@ -79,7 +79,7 @@ class LoginPage extends Component {
             <Segment stacked>
               <Form.Field>
                 <GoogleLogin
-                  clientId="437609978470-2bgj48j2dr3l3j677iipm56dap9glptm.apps.googleusercontent.com"
+                  clientId={GOOGLE_ID}
                   buttonText="Login with Google"
                   onSuccess={this.googleSuccessResponse}
                   onFailure={this.googleFailureResponse}
@@ -89,7 +89,7 @@ class LoginPage extends Component {
                 <FacebookLogin
                   size="small"
                   icon={<Icon name="facebook" />}
-                  appId="2356125257980726"
+                  appId={FACEBOOK_ID}
                   autoLoad={false}
                   fields="name,email,picture"
                   callback={this.responseFacebook}
