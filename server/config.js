@@ -8,7 +8,9 @@ try {
 }
 
 module.exports = {
-  mongoURL: 'mongodb://127.0.0.1:27017/jogging-tracker',
+  mongoURL: `mongodb+srv://${process.env.MONGO_USENAME}:${
+    process.env.MONGO_PASSWORD
+  }@react-boilerplate-djfgx.mongodb.net/jogging-track?retryWrites=true&w=majority`,
   jwtSecret: 'ajlksjdflkaklsjdfkljakl',
   jwtExpires: '30d',
   emailExpires: '1d',
