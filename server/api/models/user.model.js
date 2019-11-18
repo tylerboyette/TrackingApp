@@ -93,9 +93,9 @@ userSchema.post('save', function emailVerification(item) {
         {
           to: item.email,
           subject: 'Confirm your email!',
-          html: `Hello, <b>${item.firstName} ${
-            item.lastName
-          }!</b> <br/>Please click this email to confirm your email. <br/><a href = "${url}">Confirm your Email</a><br/><span>Thanks</span>`,
+          html: `Hello, <b>${item.firstName} ${item.lastName}!</b> <br/>
+          <p>Welcome to signup Jogging Track Heroku APP</p><br/>
+          Please click this email to confirm your email. <br/><a href = "${url}">Confirm your Email</a><br/><span>Thanks</span>`,
         },
         (err, info) => {
           // eslint-disable-next-line no-console
