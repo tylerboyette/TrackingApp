@@ -11,8 +11,7 @@ module.exports = (app, cb) => {
   mongoose.set('useCreateIndex', true);
   mongoose.set('useUnifiedTopology', true);
   console.log(config.mongoURL);
-  const mongodbUri = process.env.MONGODB_URI || config.mongoURL;
-  mongoose.connect(mongodbUri, error => {
+  mongoose.connect(config.mongoURL, error => {
     if (error) {
       console.error('Please make sure Mongodb is installed and running!'); // eslint-disable-line no-console
       throw error;
