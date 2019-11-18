@@ -89,3 +89,24 @@ export function emailVerifyError(data) {
     ...data,
   };
 }
+
+export function sendEmailRequest(data) {
+  return {
+    type: CONSTANTS.SEND_EMAIL_REQUEST,
+    data,
+  };
+}
+
+export function sendEmailSuccess(data) {
+  return {
+    type: CONSTANTS.SEND_EMAIL_SUCCESS,
+    data,
+  };
+}
+
+export function sendEmailError(data) {
+  return {
+    type: CONSTANTS.SEND_EMAIL_ERROR,
+    ...data,
+  };
+}

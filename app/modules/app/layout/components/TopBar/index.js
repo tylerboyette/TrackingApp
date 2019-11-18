@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -28,6 +31,11 @@ class TopBar extends Component {
           <Menu.Item as={Link} header to="/">
             Jogging Track
           </Menu.Item>
+          {currentUser.isActived === false && (
+            <Menu.Item as={Link} header to="/sendEmail">
+              Verify Email Address
+            </Menu.Item>
+          )}
           {(currentUser.role === 'admin' || currentUser.role === 'manager') && (
             <Dropdown item simple text="Users">
               <Dropdown.Menu>

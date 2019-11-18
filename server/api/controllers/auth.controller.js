@@ -1,8 +1,10 @@
+/* eslint-disable no-var */
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
 const jwt = require('jsonwebtoken');
 const config = require('../../config');
 const User = require('../models/user.model');
+const { transporter } = require('../constants/mailer');
 
 function login(req, res, next) {
   User.findOne({ email: req.body.email })
@@ -16,11 +18,11 @@ function login(req, res, next) {
           .status(500)
           .json({ message: 'Email or password does not match' });
       }
-      if (!user.isActived) {
-        return res
-          .status(500)
-          .json({ message: 'Please confirm your email address to login!' });
-      }
+      // if (!user.isActived) {
+      //   return res
+      //     .status(500)
+      //     .json({ message: 'Please confirm your email address to login!' });
+      // }
 
       return user
         .authenticate(req.body.password)
@@ -45,6 +47,7 @@ function login(req, res, next) {
             role: user.role,
             imageUrl: user.imageUrl,
             avatar: user.avatar,
+            isActived: user.isActived,
             token,
           });
         })
@@ -156,9 +159,44 @@ function verifyEmail(req, res) {
     res.status(500).json({ message: error });
   }
 }
+function sendEmail(req, res) {
+  var item = req.body;
+  console.log('data', item);
+  const token = jwt.sign(
+    {
+      _id: item._id, // eslint-disable-line
+    },
+    config.jwtSecret,
+    { expiresIn: config.jwtExpires },
+  );
+  const url = `${process.env.CONFIRM_EMAIL_ADDRESS}/${token}`;
+  try {
+    transporter.sendMail(
+      {
+        to: item.email,
+        subject: 'Confirm your email!',
+        html: `Hello, <b>${item.firstName} ${item.lastName}!</b> <br/>
+        <p>Welcome to signup Jogging Track Heroku APP</p><br/>
+        Please click this email to confirm your email. <br/><a href = "${url}">Confirm your Email</a><br/><span>Thanks</span>`,
+      },
+      (err, info) => {
+        // eslint-disable-next-line no-console
+        if (err) res.status(500).json({ message: err });
+        else {
+          console.log('Message sent', info);
+          res.json({ message: 'Send message to your email' });
+        }
+      },
+    );
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('error', error);
+  }
+}
 module.exports = {
   login,
   socialLogin,
   signup,
   verifyEmail,
+  sendEmail,
 };

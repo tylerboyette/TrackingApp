@@ -22,8 +22,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Notification from 'containers/Notification';
 import { makeSelectCurrentUser } from 'containers/App/selectors';
 
-import reducer from './redux/reducer';
-import saga from './redux/saga';
+import SendEmailPage from 'components/SendEmail';
 
 import TopBar from './layout/components/TopBar';
 
@@ -35,6 +34,10 @@ import ProFilePage from './user/pages/ProFilePage';
 import EntriesPage from './entry/pages/EntriesPage';
 import WeeklyReport from './entry/pages/ReportPage';
 import EntryEditPage from './entry/pages/EntryEditPage';
+
+import reducer from './redux/reducer';
+import saga from './redux/saga';
+
 import './styles.scss';
 
 class App extends Component {
@@ -43,6 +46,7 @@ class App extends Component {
       <Switch>
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/profile" component={ProFilePage} />
+        <Route exact path="/sendEmail" component={SendEmailPage} />
         <Route exact path="/users" component={UsersPage} />
         <Route exact path="/users/:id" component={UserEditPage} /> }
         <Route exact path="/entries" component={EntriesPage} />
@@ -58,6 +62,7 @@ class App extends Component {
       <Switch>
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/profile" component={ProFilePage} />
+        <Route exact path="/sendEmail" component={SendEmailPage} />
         <Route exact path="/users" component={UsersPage} />
         <Route exact path="/users/:id" component={UserEditPage} /> }
         <Route render={() => <Redirect to="/" />} />
@@ -70,6 +75,7 @@ class App extends Component {
       <Switch>
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/profile" component={ProFilePage} />
+        <Route exact path="/sendEmail" component={SendEmailPage} />
         <Route exact path="/entries" component={EntriesPage} />
         <Route exact path="/report" component={WeeklyReport} />
         <Route exact path="/entries/:id" component={EntryEditPage} />

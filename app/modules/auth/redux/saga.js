@@ -13,6 +13,8 @@ import {
   loginSocialError,
   emailVerifySuccess,
   emailVerifyError,
+  sendEmailSuccess,
+  sendEmailError,
 } from './actions';
 
 export function* loginRequest(action) {
@@ -51,9 +53,20 @@ export function* emailRequest(action) {
     yield put(emailVerifyError(err));
   }
 }
+export function* sendEmailRequest(action) {
+  try {
+    const data = yield call(request, 'auth/sendEmail', 'POST', action.data);
+    yield put(sendEmailSuccess(data));
+    notify.success('Message sent successfully');
+  } catch (err) {
+    yield put(sendEmailError(err));
+    notify.error('Message sent failed');
+  }
+}
 export default function* authSaga() {
   yield takeLatest(CONSTANTS.LOGIN_REQUEST, loginRequest);
   yield takeLatest(CONSTANTS.SIGNUP_REQUEST, signupRequest);
   yield takeLatest(CONSTANTS.LOGIN_SOCIAL_REQUEST, loginSocialRequest);
   yield takeLatest(CONSTANTS.EMAIL_VERIFY_REQUEST, emailRequest);
+  yield takeLatest(CONSTANTS.SEND_EMAIL_REQUEST, sendEmailRequest);
 }

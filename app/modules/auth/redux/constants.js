@@ -15,4 +15,8 @@ export const EMAIL_VERIFY_REQUEST = 'auth/login/email/request';
 export const EMAIL_VERIFY_SUCCESS = 'auth/login/email/success';
 export const EMAIL_VERIFY_ERROR = 'auth/login/email/error';
 
+export const SEND_EMAIL_REQUEST = 'auth/login/sendEmail/request';
+export const SEND_EMAIL_SUCCESS = 'auth/login/sendEmail/success';
+export const SEND_EMAIL_ERROR = 'auth/login/sendEmail/error';
+
 export const LOGOUT = 'auth/logout';
