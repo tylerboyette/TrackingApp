@@ -7,6 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import { Button, Form, Grid, Header, Segment, Icon } from 'semantic-ui-react';
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
+
 import { loginRequest, loginSocialRequest } from '../redux/actions';
 import { GOOGLE_ID, FACEBOOK_ID } from '../config';
 import './style.scss';
