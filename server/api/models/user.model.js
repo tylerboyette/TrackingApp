@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const ip = require('ip');
 
 const ROLES = require('../constants/role');
 const config = require('../../config');
@@ -88,7 +87,7 @@ userSchema.post('save', function emailVerification(item) {
       config.jwtSecret,
       { expiresIn: config.jwtExpires },
     );
-    const url = `http://${ip.address()}:3000/email-verification/${token}`;
+    const url = `https://jogging-track-yuki.herokuapp.com/email-verification/${token}`;
     try {
       transporter.sendMail(
         {
