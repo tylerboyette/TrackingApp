@@ -3,24 +3,13 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
 
+const { transporter } = require('../constants/mailer');
 const ROLES = require('../constants/role');
 const config = require('../../config');
 
 const { Schema } = mongoose;
 const SALT_ROUNDS = 10;
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'yukisanada1992@gmail.com',
-    pass: 'A$$assin0',
-  },
-  tls: {
-    rejectedUnauthorized: false,
-  },
-});
 
 const userSchema = new Schema({
   firstName: { type: String, required: true, trim: true, default: '' },
@@ -87,7 +76,7 @@ userSchema.post('save', function emailVerification(item) {
       config.jwtSecret,
       { expiresIn: config.jwtExpires },
     );
-    const url = `https://jogging-track-yuki.herokuapp.com/email-verification/${token}`;
+    const url = `${process.env.CONFIRM_EMAIL_ADDRESS}/${token}`;
     try {
       transporter.sendMail(
         {
