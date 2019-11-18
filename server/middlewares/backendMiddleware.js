@@ -10,8 +10,6 @@ module.exports = (app, cb) => {
   mongoose.set('useNewUrlParser', true);
   mongoose.set('useCreateIndex', true);
   mongoose.set('useUnifiedTopology', true);
-  mongoose.set('connectTimeoutMS', 100000);
-  console.log(config.mongoURL);
   mongoose.connect(config.mongoURL, error => {
     if (error) {
       console.error('Please make sure Mongodb is installed and running!'); // eslint-disable-line no-console
