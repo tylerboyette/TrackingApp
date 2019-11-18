@@ -161,7 +161,6 @@ function verifyEmail(req, res) {
 }
 function sendEmail(req, res) {
   var item = req.body;
-  console.log('data', item);
   const token = jwt.sign(
     {
       _id: item._id, // eslint-disable-line
@@ -181,8 +180,11 @@ function sendEmail(req, res) {
       },
       (err, info) => {
         // eslint-disable-next-line no-console
-        if (err) res.status(500).json({ message: err });
-        else {
+
+        if (err) {
+          console.log('error', err);
+          res.status(500).json({ message: err });
+        } else {
           console.log('Message sent', info);
           res.json({ message: 'Send message to your email' });
         }
