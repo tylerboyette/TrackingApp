@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react/prop-types */
+/* eslint-disable object-shorthand */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-shadow */
 /* eslint-disable no-var */
@@ -11,13 +13,13 @@ import {
   Marker,
   Polyline,
 } from 'react-google-maps';
+import mapStyles from './mapStyle';
 
 class MyMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      position: [],
-      location: {},
+      location: { lat: 0, lng: 0 },
     };
   }
 
@@ -28,48 +30,77 @@ class MyMap extends Component {
   getGeoLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
-        this.setState({
-          location: {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          },
-        });
+        if (!this.props.position.length) {
+          this.setState({
+            location: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            },
+          });
+        } else {
+          this.setState({
+            location: this.props.position[0],
+          });
+        }
       });
     }
   };
 
   setMaker = e => {
-    var { position } = this.state;
-    if (position.length >= 2) {
-      return;
-    }
-    position.push({
+    var { position } = this.props;
+    if (position.length >= 2) return;
+    const newMarker = {
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
-    });
-    this.setState({ position });
+    };
+    const temp = position.concat([newMarker]);
+    this.props.changePath(temp);
   };
 
   removeMaker = (marker, index) => {
-    var { position } = this.state;
+    var { position } = this.props;
     var temp = position.filter((item, ind) => ind !== index);
-    this.setState({ position: temp });
+    this.props.changePath(temp);
+  };
+
+  changeMaker = (e, index) => {
+    var { position } = this.props;
+    position[index] = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng(),
+    };
+
+    this.props.changePath(position);
   };
 
   render() {
-    const { position, location } = this.state;
+    const { location } = this.state;
+    const { position } = this.props;
     return (
-      <GoogleMap defaultZoom={15} center={location} onClick={this.setMaker}>
+      <GoogleMap
+        defaultZoom={15}
+        center={location}
+        onClick={this.setMaker}
+        defaultOptions={{ styles: mapStyles }}
+      >
         {position &&
           position.map((item, index) => (
             <Marker
               onClick={item => this.removeMaker(item, index)}
               key={index}
               position={{ lat: item.lat, lng: item.lng }}
+              onDrag={event => this.changeMaker(event, index)}
             />
           ))}
         {position.length === 2 && (
-          <Polyline path={position} options={{ strokeColor: '#20ffce' }} />
+          <Polyline
+            path={position}
+            options={{
+              strokeColor: '#20ffce',
+              strokeOpacity: 0.75,
+              strokeWeight: 2,
+            }}
+          />
         )}
       </GoogleMap>
     );
@@ -77,6 +108,8 @@ class MyMap extends Component {
 }
 
 const MyMapComponent = withScriptjs(
-  withGoogleMap(props => <MyMap props={props} />),
+  withGoogleMap(props => (
+    <MyMap props={props} changePath={props.changePath} position={props.path} />
+  )),
 );
 export default MyMapComponent;

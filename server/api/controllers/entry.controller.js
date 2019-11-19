@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
 const Entry = require('../models/entry.model');
 const ROLES = require('../constants/role');

@@ -13,6 +13,10 @@ const EntrySchema = new Schema(
       default: 0,
       validate: [positiveNumber, 'Duration should be bigger than 00:00'],
     },
+    path: {
+      type: Array,
+      default: [],
+    },
     distance: {
       type: Number,
       default: 0,

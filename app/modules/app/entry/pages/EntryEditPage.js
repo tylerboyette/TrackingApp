@@ -1,3 +1,9 @@
+/* eslint-disable indent */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
+/* eslint-disable lines-between-class-members */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -5,6 +11,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { createStructuredSelector } from 'reselect';
+import MapComponent from 'components/Map';
 import {
   Header,
   Segment,
@@ -14,6 +21,7 @@ import {
   Dimmer,
   Loader,
 } from 'semantic-ui-react';
+import getDistanceBetweenPoints from 'utils/distance';
 import {
   entryLoadRequest,
   updateEntryField,
@@ -21,12 +29,10 @@ import {
   loadNewEntry,
 } from '../redux/actions';
 import { makeSelectEntry, makeSelectEntryLoading } from '../redux/selectors';
-
 class EntryPage extends Component {
   componentWillMount() {
     this.loadEntry(this.props.match.params.id);
   }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params.id !== this.props.match.params.id) {
       this.loadEntry(nextProps.match.params.id);
@@ -60,10 +66,23 @@ class EntryPage extends Component {
       entryLoad(id);
     }
   };
-
+  changePath = path => {
+    const distance =
+      path.length === 2
+        ? (
+            getDistanceBetweenPoints(
+              path[0].lat,
+              path[0].lng,
+              path[1].lat,
+              path[1].lng,
+            ) / 1000
+          ).toFixed(2)
+        : 0;
+    this.props.updateField('path', path);
+    this.props.updateField('distance', distance);
+  };
   render() {
     const { entry, loading } = this.props;
-
     return (
       <Container fluid>
         <Dimmer active={loading}>
@@ -81,13 +100,22 @@ class EntryPage extends Component {
                 onChange={this.onChangeDate}
               />
             </Form.Field>
-            <Form.Input
+            <MapComponent
+              isMarkerShown
+              path={entry.path}
+              changePath={this.changePath}
+              googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyAFDbvGO-bYQ1TDE8jJG3nZZAU0WnH1Abc"
+              loadingElement={<div style={{ height: `100%` }} />}
+              containerElement={<div style={{ height: `400px` }} />}
+              mapElement={<div style={{ height: `100%` }} />}
+            />
+            {/* <Form.Input
               label="Distance(km)"
               type="number"
               required
               value={entry.distance || 0}
               onChange={this.onUpdateField('distance')}
-            />
+            /> */}
             <Form.Input
               label="Duration(mins)"
               type="number"
