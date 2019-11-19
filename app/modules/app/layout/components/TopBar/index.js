@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
-import { Menu, Dropdown, Container } from 'semantic-ui-react';
+import { Menu, Dropdown, Container, Icon } from 'semantic-ui-react';
 import { makeSelectCurrentUser } from 'containers/App/selectors';
 import { logout } from 'modules/auth/redux/actions';
 import UserAvatar from 'react-user-avatar';
@@ -40,10 +40,11 @@ class TopBar extends Component {
             <Dropdown item simple text="Users">
               <Dropdown.Menu>
                 <Dropdown.Item as={Link} to="/users/new">
-                  Add New User
+                  Add New User <Icon name="user plus" />
                 </Dropdown.Item>
                 <Dropdown.Item as={Link} to="/users">
                   User List
+                  <Icon name="users" />
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -76,8 +77,11 @@ class TopBar extends Component {
                 </Dropdown.Item>
                 <Dropdown.Item as={Link} to="/profile">
                   Settings
+                  <Icon name="setting" />
                 </Dropdown.Item>
-                <Dropdown.Item onClick={logoutAction}>Log Out</Dropdown.Item>
+                <Dropdown.Item onClick={logoutAction}>
+                  Log Out <Icon name="sign out" />
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Menu>

@@ -115,9 +115,14 @@ class LoginPage extends Component {
                 placeholder="Password"
                 type="password"
               />
-              <Button primary fluid size="large">
-                Login
-              </Button>
+              <Button
+                primary
+                fluid
+                size="large"
+                content="Login"
+                icon="sign in alternate"
+                labelPosition="right"
+              />
               <Link to="/signup" className="signup-link">
                 Click here to sign up
               </Link>
