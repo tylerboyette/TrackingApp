@@ -17,30 +17,49 @@ class MyMap extends Component {
     super(props);
     this.state = {
       position: [],
+      location: {},
     };
   }
+
+  componentWillMount() {
+    this.getGeoLocation();
+  }
+
+  getGeoLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.setState({
+          location: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          },
+        });
+      });
+    }
+  };
+
   setMaker = e => {
     var { position } = this.state;
-    if (position.length >= 2) return;
+    if (position.length >= 2) {
+      return;
+    }
     position.push({
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
     });
     this.setState({ position });
   };
+
   removeMaker = (marker, index) => {
     var { position } = this.state;
     var temp = position.filter((item, ind) => ind !== index);
     this.setState({ position: temp });
   };
+
   render() {
-    const { position } = this.state;
+    const { position, location } = this.state;
     return (
-      <GoogleMap
-        defaultZoom={17}
-        defaultCenter={{ lat: 43.1056, lng: 131.8735 }}
-        onClick={this.setMaker}
-      >
+      <GoogleMap defaultZoom={15} center={location} onClick={this.setMaker}>
         {position &&
           position.map((item, index) => (
             <Marker
