@@ -37,6 +37,15 @@ class MyMap extends Component {
               lng: position.coords.longitude,
             },
           });
+        } else if (this.props.position.length === 2) {
+          this.setState({
+            location: {
+              lat:
+                (this.props.position[0].lat + this.props.position[1].lat) / 2,
+              lng:
+                (this.props.position[0].lng + this.props.position[1].lng) / 2,
+            },
+          });
         } else {
           this.setState({
             location: this.props.position[0],

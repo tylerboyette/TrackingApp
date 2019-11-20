@@ -1,3 +1,5 @@
+/* eslint-disable func-names */
+/* eslint-disable lines-between-class-members */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
@@ -7,6 +9,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
+import imageExists from 'image-exists';
 import { Header, Segment, Container, Form, Button } from 'semantic-ui-react';
 import { makeSelectCurrentUser } from 'containers/App/selectors';
 import Avatar from 'react-avatar-edit';
@@ -27,11 +30,19 @@ class Profile extends Component {
     super(props);
     this.state = {
       user: this.props.currentUser,
+      imageURL: this.props.currentUser.imageURL,
       files: [],
       preview: null,
     };
   }
-
+  componentDidMount() {
+    const { imageURL } = this.state;
+    imageExists(imageURL, function(exists) {
+      if (!exists) {
+        this.setState({ imageURL: null });
+      }
+    });
+  }
   onClose = () => {
     this.setState({ preview: null });
   };
@@ -77,7 +88,6 @@ class Profile extends Component {
 
   render() {
     const { user, files } = this.state;
-
     return (
       <Container fluid className="main-app-container">
         <Header as="h2" content="Profile Settings" textAlign="center" />
@@ -100,7 +110,7 @@ class Profile extends Component {
                 onCrop={this.onCrop}
                 onClose={this.onClose}
                 onBeforeFileLoad={this.onBeforeFileLoad}
-                src={user.imageUrl}
+                src={this.state.imageURL}
               />
             </div>
             <Form.Input
