@@ -55,6 +55,7 @@ function update(req, res, next) {
 function updateProfile(req, res, next) {
   const form = new formidable.IncomingForm();
   form.uploadDir = `${process.cwd()}/server/public/img`;
+  console.log('form.uploadDir', form.uploadDir);
   const fileCropName = `/public/img/crop_${Date.now()}.jpg`;
 
   form.parse(req, function(err, fields, files) {});
