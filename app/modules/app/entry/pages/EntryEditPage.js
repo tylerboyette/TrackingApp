@@ -22,6 +22,7 @@ import {
   Loader,
 } from 'semantic-ui-react';
 import getDistanceBetweenPoints from 'utils/distance';
+import { MAP_KEY } from 'constants/config';
 import {
   entryLoadRequest,
   updateEntryField,
@@ -104,7 +105,7 @@ class EntryPage extends Component {
               isMarkerShown
               path={entry.path}
               changePath={this.changePath}
-              googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyAFDbvGO-bYQ1TDE8jJG3nZZAU0WnH1Abc"
+              googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${MAP_KEY}`}
               loadingElement={<div style={{ height: `100%` }} />}
               containerElement={<div style={{ height: `400px` }} />}
               mapElement={<div style={{ height: `100%` }} />}

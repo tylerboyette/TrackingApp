@@ -30,19 +30,11 @@ class Profile extends Component {
     super(props);
     this.state = {
       user: this.props.currentUser,
-      imageURL: this.props.currentUser.imageURL,
       files: [],
       preview: null,
     };
   }
-  componentDidMount() {
-    const { imageURL } = this.state;
-    imageExists(imageURL, function(exists) {
-      if (!exists) {
-        this.setState({ imageURL: null });
-      }
-    });
-  }
+
   onClose = () => {
     this.setState({ preview: null });
   };
@@ -110,7 +102,7 @@ class Profile extends Component {
                 onCrop={this.onCrop}
                 onClose={this.onClose}
                 onBeforeFileLoad={this.onBeforeFileLoad}
-                src={this.state.imageURL}
+                src={user.imageUrl}
               />
             </div>
             <Form.Input
