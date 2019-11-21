@@ -30,13 +30,14 @@ class Profile extends Component {
     super(props);
     this.state = {
       user: this.props.currentUser,
+      image: this.props.currentUser.imageUrl,
       files: [],
       preview: null,
     };
   }
 
   onClose = () => {
-    this.setState({ preview: null });
+    this.setState({ files: [], preview: null });
   };
 
   onCrop = preview => {
@@ -72,14 +73,18 @@ class Profile extends Component {
   //     files: fileItems.map(fileItem => fileItem.file),
   //   });
   // };
-
+  onChekcUrl = url => {
+    imageExists(url, exists => {
+      if (!exists) this.setState({ image: undefined });
+    });
+  };
   onBeforeFileLoad = elem => {
-    console.log(elem.target.files);
     this.setState({ files: elem.target.files });
   };
 
   render() {
-    const { user, files } = this.state;
+    const { user, files, image } = this.state;
+    if (image) this.onChekcUrl(user.imageUrl);
     return (
       <Container fluid className="main-app-container">
         <Header as="h2" content="Profile Settings" textAlign="center" />
@@ -96,14 +101,26 @@ class Profile extends Component {
                 alignItems: 'center',
               }}
             >
-              <Avatar
-                width={200}
-                height={200}
-                onCrop={this.onCrop}
-                onClose={this.onClose}
-                onBeforeFileLoad={this.onBeforeFileLoad}
-                src={user.imageUrl}
-              />
+              {image ? (
+                <Avatar
+                  width={200}
+                  height={200}
+                  onCrop={this.onCrop}
+                  onClose={this.onClose}
+                  onBeforeFileLoad={this.onBeforeFileLoad}
+                  src={image}
+                />
+              ) : (
+                <>
+                  <Avatar
+                    width={200}
+                    height={200}
+                    onCrop={this.onCrop}
+                    onClose={this.onClose}
+                    onBeforeFileLoad={this.onBeforeFileLoad}
+                  />
+                </>
+              )}
             </div>
             <Form.Input
               label="First Name"
