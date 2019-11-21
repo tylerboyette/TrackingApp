@@ -85,6 +85,7 @@ class Profile extends Component {
   render() {
     const { user, files, image } = this.state;
     if (image) this.onChekcUrl(user.imageUrl);
+    console.log('image', image);
     return (
       <Container fluid className="main-app-container">
         <Header as="h2" content="Profile Settings" textAlign="center" />
