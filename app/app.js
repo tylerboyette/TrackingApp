@@ -22,7 +22,6 @@ import { localForage } from 'localforage';
 import 'sanitize.css/sanitize.css';
 import 'semantic-ui-css/semantic.min.css';
 
-import initializeNotify from './utils/notify';
 // Import root app
 import App from 'containers/App';
 import LoadingIndicator from 'components/LoadingIndicator';
@@ -30,6 +29,7 @@ import LoadingIndicator from 'components/LoadingIndicator';
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
 
+import initializeNotify from './utils/notify';
 // Load the favicon and the .htaccess file
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import 'file-loader?name=.htaccess!./.htaccess'; // eslint-disable-line import/extensions

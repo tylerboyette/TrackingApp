@@ -2,7 +2,6 @@
 coverage
 build
 node_modules
-server/public/img
 stats.json
 
 # Cruft
