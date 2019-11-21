@@ -36,6 +36,11 @@ class Profile extends Component {
     };
   }
 
+  componentDidMount() {
+    const { image } = this.state;
+    this.onChekcUrl(image);
+  }
+
   onClose = () => {
     this.setState({ files: [], preview: null });
   };
@@ -73,19 +78,19 @@ class Profile extends Component {
   //     files: fileItems.map(fileItem => fileItem.file),
   //   });
   // };
+
   onChekcUrl = url => {
     imageExists(url, exists => {
       if (!exists) this.setState({ image: undefined });
     });
   };
+
   onBeforeFileLoad = elem => {
     this.setState({ files: elem.target.files });
   };
 
   render() {
     const { user, files, image } = this.state;
-    if (image) this.onChekcUrl(user.imageUrl);
-    console.log('image', image);
     return (
       <Container fluid className="main-app-container">
         <Header as="h2" content="Profile Settings" textAlign="center" />
@@ -102,7 +107,7 @@ class Profile extends Component {
                 alignItems: 'center',
               }}
             >
-              {image ? (
+              {image !== undefined ? (
                 <Avatar
                   width={200}
                   height={200}
@@ -113,6 +118,7 @@ class Profile extends Component {
                 />
               ) : (
                 <>
+                  <p>{image}</p>
                   <Avatar
                     width={200}
                     height={200}
