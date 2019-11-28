@@ -1,3 +1,4 @@
+/* eslint-disable prefer-template */
 /* eslint-disable func-names */
 /* eslint-disable lines-between-class-members */
 /* eslint-disable prettier/prettier */
@@ -13,6 +14,7 @@ import imageExists from 'image-exists';
 import { Header, Segment, Container, Form, Button } from 'semantic-ui-react';
 import { makeSelectCurrentUser } from 'containers/App/selectors';
 import Avatar from 'react-avatar-edit';
+import { storage } from 'utils/firebase';
 import { profileSaveRequest } from '../redux/actions';
 
 // import { FilePond, registerPlugin } from 'react-filepond';
@@ -46,6 +48,7 @@ class Profile extends Component {
   };
 
   onCrop = preview => {
+    console.log(preview);
     this.setState({ preview });
   };
 
@@ -59,18 +62,68 @@ class Profile extends Component {
   onSubmit = () => {
     const { user, files, preview } = this.state;
     const { saveProfile } = this.props;
-    const fd = new FormData();
     if (files.length) {
-      fd.append('file', files[0]);
+      const name = +new Date() + '-' + files[0].name;
+      const previewName = +new Date() + '-avatar.jpg';
+      const metadata = {
+        contentType: files[0].type,
+      };
+      const taskOne = storage.ref(`images/${name}`).put(files[0], metadata);
+      taskOne
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(imgUrl => {
+          const taskTwo = storage
+            .ref(`images/${previewName}`)
+            .putString(preview, 'data_url');
+          taskTwo
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(previewUrl => {
+              saveProfile({
+                body: {
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  email: user.email,
+                  imageUrl: imgUrl,
+                  avatar: previewUrl,
+                  password: user.password,
+                },
+              });
+            });
+        })
+        .catch(console.error);
+    } else {
+      console.log(preview);
+      const previewName = +new Date() + '-avatar.jpg';
+      const taskTwo = storage
+        .ref(`images/${previewName}`)
+        .putString(preview, 'data_url');
+      taskTwo
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(previewUrl => {
+          saveProfile({
+            body: {
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              avatar: previewUrl,
+              password: user.password,
+            },
+          });
+        });
     }
-    fd.append('data', JSON.stringify(user));
-    if (preview) fd.append('preview', preview);
-    saveProfile({
-      body: fd,
-      header_type: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+
+    // const fd = new FormData();
+    // if (files.length) {
+    //   fd.append('file', files[0]);
+    // }
+    // fd.append('data', JSON.stringify(user));
+    // if (preview) fd.append('preview', preview);
+    // saveProfile({
+    //   body: fd,
+    //   header_type: {
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    // });
   };
 
   // setFiles = fileItems => {
@@ -91,6 +144,10 @@ class Profile extends Component {
 
   render() {
     const { user, files, image } = this.state;
+    // console.log(image);
+    // var img = new Image();
+    // img.crossOrigin = 'Anonymous';
+    // img.src = image;
     return (
       <Container fluid className="main-app-container">
         <Header as="h2" content="Profile Settings" textAlign="center" />
@@ -115,6 +172,7 @@ class Profile extends Component {
                   onClose={this.onClose}
                   onBeforeFileLoad={this.onBeforeFileLoad}
                   src={image}
+                  // img={img}
                 />
               ) : (
                 <>

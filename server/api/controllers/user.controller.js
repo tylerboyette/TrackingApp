@@ -35,7 +35,8 @@ function update(req, res, next) {
     lastName: req.body.lastName,
     email: req.body.email,
   });
-
+  if (req.body.imageUrl) req.userModel.imageUrl = req.body.imageUrl;
+  if (req.body.avatar) req.userModel.avatar = req.body.avatar;
   if (req.body.password) {
     req.userModel.password = req.body.password;
   }
@@ -53,70 +54,115 @@ function update(req, res, next) {
 }
 
 function updateProfile(req, res, next) {
-  const form = new formidable.IncomingForm();
-  form.uploadDir = `${process.cwd()}/server/public/img`;
-  console.log('form.uploadDir', form.uploadDir);
-  const fileCropName = `/public/img/crop_${Date.now()}.jpg`;
-
-  form.parse(req, function(err, fields, files) {});
-  form.on('file', function(field, file) {
-    const filename = file.name;
-    const fileName = `${Date.now()}__${file.name}`;
-    req.userModel.imageUrl = `/public/img/${fileName}`;
-    fs.rename(file.path, path.join(form.uploadDir, fileName), function(err) {});
+  Object.assign(req.userModel, {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
   });
+  if (req.body.imageUrl) req.userModel.imageUrl = req.body.imageUrl;
+  if (req.body.avatar) req.userModel.avatar = req.body.avatar;
+  if (req.body.password) {
+    req.userModel.password = req.body.password;
+  }
 
-  form.on('field', function(name, value) {
-    if (name === 'preview') {
-      const filePath = `${process.cwd()}/server/${fileCropName}`;
-      const base64Image = value.split(';base64,').pop();
-      fs.writeFile(filePath, base64Image, { encoding: 'base64' }, function(
-        err,
-      ) {});
-    } else {
-      const data = JSON.parse(value);
-      Object.assign(req.userModel, {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-      });
-      if (data.password) {
-        req.userModel.password = data.password;
-      }
-    }
-  });
+  if (req.user.role === ROLES.ADMIN && req.body.role) {
+    req.userModel.role = req.body.role;
+  }
 
-  form.on('end', function() {
-    req.userModel.avatar = fileCropName;
-    req.userModel
-      .save()
-      .then(updatedUser => {
-        const token = jwt.sign(
-          {
-            _id: updatedUser._id, // eslint-disable-line
-            firstName: updatedUser.firstName,
-            lastName: updatedUser.lastName,
-            email: updatedUser.email,
-            role: updatedUser.role,
-          },
-          config.jwtSecret,
-          { expiresIn: config.jwtExpires },
-        );
-        res.json({
+  req.userModel
+    .save()
+    .then(updatedUser => {
+      const token = jwt.sign(
+        {
           _id: updatedUser._id, // eslint-disable-line
           firstName: updatedUser.firstName,
           lastName: updatedUser.lastName,
           email: updatedUser.email,
           role: updatedUser.role,
-          imageUrl: updatedUser.imageUrl,
-          avatar: updatedUser.avatar,
-          isActived: updatedUser.isActived,
-          token,
-        });
-      })
-      .catch(next);
-  });
+        },
+        config.jwtSecret,
+        { expiresIn: config.jwtExpires },
+      );
+      res.json({
+        _id: updatedUser._id, // eslint-disable-line
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        imageUrl: updatedUser.imageUrl,
+        avatar: updatedUser.avatar,
+        isActived: updatedUser.isActived,
+        token,
+      });
+    })
+    .catch(next);
 }
+
+// function updateProfile(req, res, next) {
+//   const form = new formidable.IncomingForm();
+//   form.uploadDir = `${process.cwd()}/server/public/img`;
+//   console.log('form.uploadDir', form.uploadDir);
+//   const fileCropName = `/public/img/crop_${Date.now()}.jpg`;
+
+//   form.parse(req, function(err, fields, files) {});
+//   form.on('file', function(field, file) {
+//     const filename = file.name;
+//     const fileName = `${Date.now()}__${file.name}`;
+//     req.userModel.imageUrl = `/public/img/${fileName}`;
+//     fs.rename(file.path, path.join(form.uploadDir, fileName), function(err) {});
+//   });
+
+//   form.on('field', function(name, value) {
+//     if (name === 'preview') {
+//       const filePath = `${process.cwd()}/server/${fileCropName}`;
+//       const base64Image = value.split(';base64,').pop();
+//       fs.writeFile(filePath, base64Image, { encoding: 'base64' }, function(
+//         err,
+//       ) {});
+//     } else {
+//       const data = JSON.parse(value);
+//       Object.assign(req.userModel, {
+//         firstName: data.firstName,
+//         lastName: data.lastName,
+//         email: data.email,
+//       });
+//       if (data.password) {
+//         req.userModel.password = data.password;
+//       }
+//     }
+//   });
+
+//   form.on('end', function() {
+//     req.userModel.avatar = fileCropName;
+//     req.userModel
+//       .save()
+//       .then(updatedUser => {
+//         const token = jwt.sign(
+//           {
+//             _id: updatedUser._id, // eslint-disable-line
+//             firstName: updatedUser.firstName,
+//             lastName: updatedUser.lastName,
+//             email: updatedUser.email,
+//             role: updatedUser.role,
+//           },
+//           config.jwtSecret,
+//           { expiresIn: config.jwtExpires },
+//         );
+//         res.json({
+//           _id: updatedUser._id, // eslint-disable-line
+//           firstName: updatedUser.firstName,
+//           lastName: updatedUser.lastName,
+//           email: updatedUser.email,
+//           role: updatedUser.role,
+//           imageUrl: updatedUser.imageUrl,
+//           avatar: updatedUser.avatar,
+//           isActived: updatedUser.isActived,
+//           token,
+//         });
+//       })
+//       .catch(next);
+//   });
+// }
 
 function read(req, res) {
   res.json(req.userModel);

@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 
 const { transporter } = require('../constants/mailer');
 const ROLES = require('../constants/role');
+const MEMBERSHIP = require('../constants/membership');
 const config = require('../../config');
 
 const { Schema } = mongoose;
@@ -19,6 +20,11 @@ const userSchema = new Schema({
   password: { type: String, select: false },
   imageUrl: { type: String },
   avatar: { type: String },
+  membership: {
+    type: String,
+    enum: Object.values(MEMBERSHIP),
+    default: MEMBERSHIP.Free,
+  },
   role: {
     type: String,
     required: true,

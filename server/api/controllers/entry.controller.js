@@ -1,13 +1,26 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
 const Entry = require('../models/entry.model');
 const ROLES = require('../constants/role');
+const MEMBERSHIP = require('../constants/membership');
 
 function create(req, res, next) {
   const entry = new Entry(req.body);
   entry.user = req.user._id;
-
+  if (req.user.membership === MEMBERSHIP.Free) {
+    const where = { user: req.user._id };
+    Entry.find(where)
+      .then(entries => {
+        if (entries.length === 5) {
+          return res.status(500).json({
+            message: 'You have 5 entries. Please upgrade your membership!',
+          });
+        }
+      })
+      .catch(next);
+  }
   entry
     .save()
     .then(newEntry => {

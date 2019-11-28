@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import request from 'utils/request';
 // import history from 'browserHistory';
@@ -56,7 +57,6 @@ export function* userSaveRequest(action) {
     const requestData = user.user.data;
     const { id } = user.user;
     let responseData = null;
-    console.log(action);
     if (id === 'new') {
       responseData = yield call(
         request,
@@ -87,12 +87,10 @@ export function* userSaveRequest(action) {
 
     notify.success('User saved');
   } catch (err) {
-    console.log('err', err);
     yield put(userSaveError(err));
   }
 }
 export function* saveProfile(action) {
-  console.log('action', action);
   try {
     const data = yield call(request, `profile/me`, 'POST', action.data, true);
 

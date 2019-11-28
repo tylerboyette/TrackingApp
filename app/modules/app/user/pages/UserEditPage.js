@@ -1,3 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -36,7 +40,6 @@ class UserPage extends Component {
   onSubmit = () => {
     this.props.userSave({
       success: () => {
-        console.log('success');
         this.props.history.push('/users');
       },
       failure: () => {
