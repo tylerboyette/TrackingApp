@@ -13,7 +13,7 @@ function create(req, res, next) {
     const where = { user: req.user._id };
     Entry.find(where)
       .then(entries => {
-        if (entries.length === 5) {
+        if (entries.length >= 5) {
           return res.status(500).json({
             message: 'You have 5 entries. Please upgrade your membership!',
           });

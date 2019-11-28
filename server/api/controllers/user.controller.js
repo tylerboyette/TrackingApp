@@ -79,6 +79,7 @@ function updateProfile(req, res, next) {
           lastName: updatedUser.lastName,
           email: updatedUser.email,
           role: updatedUser.role,
+          membership: updatedUser.membership,
         },
         config.jwtSecret,
         { expiresIn: config.jwtExpires },

@@ -105,10 +105,10 @@ export function* saveProfile(action) {
 export function* upgradeMember(action) {
   try {
     const data = yield call(request, `member`, 'POST', action.data, true);
-
     yield put(memberUpgradeSuccess(data));
     notify.success('MemberShip is upgraded');
   } catch (err) {
+    console.log(err);
     notify.error('Error', err);
   }
 }

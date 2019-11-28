@@ -15,29 +15,41 @@ import {
   ReactStripeElements,
 } from 'react-stripe-elements';
 
-import { Header, Segment, Form, Button, Link } from 'semantic-ui-react';
-
+import { makeSelectCurrentUser } from 'containers/App/selectors';
+import { Header, Segment, Form, Button, Card, Icon } from 'semantic-ui-react';
 import { memberUpgradeRequest } from '../user/redux/actions';
+
+import './style.scss';
 
 class FormPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      amount: 0,
+      membership: 'free',
     };
   }
+  componentDidMount() {
+    this.setState({ membership: this.props.currentUser.membership });
+  }
   onSubmit = async e => {
-    const token = await this.props.stripe.createToken({
-      name: this.state.name,
-      amount: this.state.amount,
-    });
-    this.props.memberUpgrade({
-      body: {
-        amount: this.state.amount,
-        token,
-      },
-    });
+    const { membership } = this.state;
+    if (membership === this.props.currentUser.membership) return;
+    if (membership === 'basic') {
+      const token = await this.props.stripe.createToken({
+        name:
+          this.props.currentUser.firstName + this.props.currentUser.lastName,
+        amount: 25,
+      });
+
+      this.props.memberUpgrade({
+        body: {
+          amount: 25,
+          token,
+        },
+      });
+    } else {
+      console.log('cancel');
+    }
   };
   // onSubmit = e => {
   //   e.preventDefault();
@@ -58,29 +70,64 @@ class FormPage extends Component {
   //     throw e;
   //   }
   // };
+  switchPlan = plan => {
+    this.setState({ membership: plan });
+  };
   render() {
+    const { membership } = this.state;
+
     return (
-      <>
-        <Form onSubmit={e => this.onSubmit(e)}>
-          <Form.Input
-            label="Name"
-            required
-            onChange={e => this.setState({ name: e.target.value })}
-          />
-          <Form.Input
-            label="Amount"
-            required
-            onChange={e => this.setState({ amount: e.target.value })}
-          />
-          <CardElement />
-          <Button>Charge It!</Button>
+      <div style={{ marginTop: '100px' }}>
+        <Form onSubmit={e => this.onSubmit(e)} size="large">
+          <Segment stacked>
+            <br />
+            <CardElement />
+            <Card.Group centered>
+              <Card
+                className={
+                  membership === 'free' ? 'memberCard selected' : 'memberCard'
+                }
+                onClick={() => this.switchPlan('free')}
+              >
+                <Card.Content textAlign="center" header="Free membership" />
+                <Card.Content
+                  textAlign="center"
+                  description="Limit 5 entries."
+                />
+                <Card.Content textAlign="center" extra>
+                  Free
+                </Card.Content>
+              </Card>
+              <Card
+                className={
+                  membership === 'basic' ? 'memberCard selected' : 'memberCard'
+                }
+                onClick={() => this.switchPlan('basic')}
+              >
+                <Card.Content textAlign="center" header="Basic membership" />
+                <Card.Content
+                  textAlign="center"
+                  description="Allow add more than 5 entries."
+                />
+                <Card.Content textAlign="center" extra>
+                  <p>$25 monthly</p>
+                </Card.Content>
+              </Card>
+            </Card.Group>
+            <br /> <br />
+            <Button primary fluid>
+              Upgrade MemberShip
+            </Button>
+          </Segment>
         </Form>
-      </>
+      </div>
     );
   }
 }
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  currentUser: makeSelectCurrentUser(),
+});
 
 const mapDispatchToProps = {
   memberUpgrade: memberUpgradeRequest,

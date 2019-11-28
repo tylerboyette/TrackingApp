@@ -34,6 +34,7 @@ function login(req, res, next) {
               lastName: user.lastName,
               email: user.email,
               role: user.role,
+              membership: user.membership,
             },
             config.jwtSecret,
             { expiresIn: config.jwtExpires },
@@ -122,6 +123,7 @@ function socialLogin(req, res, next) {
               lastName: newUser.lastName,
               email: newUser.email,
               role: newUser.role,
+              membership: user.membership,
             },
             config.jwtSecret,
             { expiresIn: config.jwtExpires },
@@ -136,6 +138,7 @@ function socialLogin(req, res, next) {
             imageUrl: newUser.imageUrl,
             avatar: newUser.avatar,
             isActived: newUser.isActived,
+            membership: user.membership,
             token,
           });
         })
