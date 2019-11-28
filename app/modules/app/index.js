@@ -35,6 +35,8 @@ import EntriesPage from './entry/pages/EntriesPage';
 import WeeklyReport from './entry/pages/ReportPage';
 import EntryEditPage from './entry/pages/EntryEditPage';
 
+import StripePage from './stripe';
+
 import reducer from './redux/reducer';
 import saga from './redux/saga';
 
@@ -52,6 +54,7 @@ class App extends Component {
         <Route exact path="/entries" component={EntriesPage} />
         <Route exact path="/entries/:id" component={EntryEditPage} />
         <Route exact path="/report" component={WeeklyReport} />
+        <Route exact path="/member" component={StripePage} />
         <Route render={() => <Redirect to="/" />} />
       </Switch>
     );
@@ -65,6 +68,7 @@ class App extends Component {
         <Route exact path="/sendEmail" component={SendEmailPage} />
         <Route exact path="/users" component={UsersPage} />
         <Route exact path="/users/:id" component={UserEditPage} /> }
+        <Route exact path="/member" component={StripePage} />
         <Route render={() => <Redirect to="/" />} />
       </Switch>
     );
@@ -79,7 +83,7 @@ class App extends Component {
         <Route exact path="/entries" component={EntriesPage} />
         <Route exact path="/report" component={WeeklyReport} />
         <Route exact path="/entries/:id" component={EntryEditPage} />
-
+        <Route exact path="/member" component={StripePage} />
         <Route render={() => <Redirect to="/" />} />
       </Switch>
     );

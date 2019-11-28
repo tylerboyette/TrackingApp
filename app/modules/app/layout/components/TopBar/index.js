@@ -31,11 +31,17 @@ class TopBar extends Component {
           <Menu.Item as={Link} header to="/">
             Jogging Track
           </Menu.Item>
+
           {currentUser.isActived === false && (
             <Menu.Item as={Link} header to="/sendEmail">
               Verify Email Address
             </Menu.Item>
           )}
+
+          <Menu.Item as={Link} header to="/member">
+            MemberShip
+          </Menu.Item>
+
           {(currentUser.role === 'admin' || currentUser.role === 'manager') && (
             <Dropdown item simple text="Users">
               <Dropdown.Menu>
@@ -49,6 +55,7 @@ class TopBar extends Component {
               </Dropdown.Menu>
             </Dropdown>
           )}
+
           {(currentUser.role === 'admin' || currentUser.role === 'user') && (
             <Dropdown item simple text="Entries">
               <Dropdown.Menu>
@@ -64,6 +71,7 @@ class TopBar extends Component {
               </Dropdown.Menu>
             </Dropdown>
           )}
+
           <Menu.Menu position="right">
             <Dropdown item simple trigger={trigger}>
               <Dropdown.Menu>

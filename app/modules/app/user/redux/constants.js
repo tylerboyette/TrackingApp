@@ -21,3 +21,7 @@ export const UPDATE_USER_FIELD = 'app/user/update_field';
 export const SAVE_PROFILE_REQUEST = 'app/user/profile/request';
 export const SAVE_PROFILE_SUCCESS = 'app/user/profile/success';
 export const SAVE_PROFILE_ERROR = 'app/user/profile/error';
+
+export const UPGRADE_MEMBER_REQUEST = 'app/stripe/upgrade/request';
+export const UPGRADE_MEMBER_SUCCESS = 'app/stripe/upgrade/success';
+export const UPGRADE_MEMBER_ERROR = 'app/stripe/upgrade/error';

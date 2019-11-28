@@ -92,6 +92,7 @@ function updateProfile(req, res, next) {
         imageUrl: updatedUser.imageUrl,
         avatar: updatedUser.avatar,
         isActived: updatedUser.isActived,
+        membership: updatedUser.membership,
         token,
       });
     })

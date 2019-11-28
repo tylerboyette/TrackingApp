@@ -1,6 +1,9 @@
 import produce from 'immer';
 import * as CONSTANTS from './constants';
-import { SAVE_PROFILE_SUCCESS } from '../../app/user/redux/constants';
+import {
+  SAVE_PROFILE_SUCCESS,
+  UPGRADE_MEMBER_SUCCESS,
+} from '../../app/user/redux/constants';
 // The initial state of the App
 export const initialState = {
   currentUser: null,
@@ -28,6 +31,9 @@ const authReducer = (state = initialState, action) =>
         break;
       case CONSTANTS.EMAIL_VERIFY_ERROR:
         draft.message = action.data.message;
+        break;
+      case UPGRADE_MEMBER_SUCCESS:
+        console.log('hello membership');
         break;
     }
   });

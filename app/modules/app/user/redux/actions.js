@@ -118,3 +118,24 @@ export function profileSaveError(data) {
     data,
   };
 }
+
+export function memberUpgradeRequest(data) {
+  return {
+    type: CONSTANTS.UPGRADE_MEMBER_REQUEST,
+    data,
+  };
+}
+
+export function memberUpgradeSuccess(data) {
+  return {
+    type: CONSTANTS.UPGRADE_MEMBER_SUCCESS,
+    data,
+  };
+}
+
+export function memberUpgradeError(data) {
+  return {
+    type: CONSTANTS.UPGRADE_MEMBER_ERROR,
+    data,
+  };
+}

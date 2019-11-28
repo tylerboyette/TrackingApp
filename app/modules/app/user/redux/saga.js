@@ -14,6 +14,7 @@ import {
   userSaveError,
   profileSaveSuccess,
   profileSaveError,
+  memberUpgradeSuccess,
 } from './actions';
 
 import { selectUser } from './selectors';
@@ -101,6 +102,16 @@ export function* saveProfile(action) {
     notify.error('Error', err);
   }
 }
+export function* upgradeMember(action) {
+  try {
+    const data = yield call(request, `member`, 'POST', action.data, true);
+
+    yield put(memberUpgradeSuccess(data));
+    notify.success('MemberShip is upgraded');
+  } catch (err) {
+    notify.error('Error', err);
+  }
+}
 
 export default function* userSaga() {
   yield takeLatest(CONSTANTS.USER_LIST_REQUEST, userListRequest);
@@ -108,4 +119,5 @@ export default function* userSaga() {
   yield takeLatest(CONSTANTS.USER_SAVE_REQUEST, userSaveRequest);
   yield takeLatest(CONSTANTS.USER_DELETE_REQUEST, userDeleteRequest);
   yield takeLatest(CONSTANTS.SAVE_PROFILE_REQUEST, saveProfile);
+  yield takeLatest(CONSTANTS.UPGRADE_MEMBER_REQUEST, upgradeMember);
 }

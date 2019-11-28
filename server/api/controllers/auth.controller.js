@@ -9,7 +9,7 @@ const { transporter } = require('../constants/mailer');
 function login(req, res, next) {
   User.findOne({ email: req.body.email })
     .select(
-      '_id password email firstName lastName role imageUrl avatar isActived',
+      '_id password email firstName lastName role imageUrl avatar isActived membership',
     )
     .exec()
     .then(user => {
@@ -48,6 +48,7 @@ function login(req, res, next) {
             imageUrl: user.imageUrl,
             avatar: user.avatar,
             isActived: user.isActived,
+            membership: user.membership,
             token,
           });
         })
