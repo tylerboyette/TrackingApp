@@ -48,7 +48,11 @@ class FormPage extends Component {
         },
       });
     } else {
-      console.log('cancel');
+      this.props.memberUpgrade({
+        body: {
+          amount: -10,
+        },
+      });
     }
   };
   // onSubmit = e => {

@@ -48,7 +48,6 @@ class Profile extends Component {
   };
 
   onCrop = preview => {
-    console.log(preview);
     this.setState({ preview });
   };
 
@@ -59,58 +58,39 @@ class Profile extends Component {
     });
   };
 
-  onSubmit = () => {
+  onSubmit = async e => {
     const { user, files, preview } = this.state;
     const { saveProfile } = this.props;
+    let imgUrl = null;
+    let previewUrl = null;
     if (files.length) {
       const name = +new Date() + '-' + files[0].name;
       const previewName = +new Date() + '-avatar.jpg';
       const metadata = {
         contentType: files[0].type,
       };
-      const taskOne = storage.ref(`images/${name}`).put(files[0], metadata);
-      taskOne
-        .then(snapshot => snapshot.ref.getDownloadURL())
-        .then(imgUrl => {
-          const taskTwo = storage
-            .ref(`images/${previewName}`)
-            .putString(preview, 'data_url');
-          taskTwo
-            .then(snapshot => snapshot.ref.getDownloadURL())
-            .then(previewUrl => {
-              saveProfile({
-                body: {
-                  firstName: user.firstName,
-                  lastName: user.lastName,
-                  email: user.email,
-                  imageUrl: imgUrl,
-                  avatar: previewUrl,
-                  password: user.password,
-                },
-              });
-            });
-        })
-        .catch(console.error);
-    } else {
-      console.log(preview);
-      const previewName = +new Date() + '-avatar.jpg';
-      const taskTwo = storage
-        .ref(`images/${previewName}`)
-        .putString(preview, 'data_url');
-      taskTwo
-        .then(snapshot => snapshot.ref.getDownloadURL())
-        .then(previewUrl => {
-          saveProfile({
-            body: {
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email,
-              avatar: previewUrl,
-              password: user.password,
-            },
-          });
-        });
+      imgUrl = await storage
+        .ref(`images/${name}`)
+        .put(files[0], metadata)
+        .then(snapshot => snapshot.ref.getDownloadURL());
     }
+    if (preview) {
+      const previewName = +new Date() + '-avatar.jpg';
+      previewUrl = await storage
+        .ref(`images/${previewName}`)
+        .putString(preview, 'data_url')
+        .then(snapshot => snapshot.ref.getDownloadURL());
+    }
+    saveProfile({
+      body: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        imageUrl: imgUrl,
+        avatar: previewUrl,
+        password: user.password,
+      },
+    });
 
     // const fd = new FormData();
     // if (files.length) {

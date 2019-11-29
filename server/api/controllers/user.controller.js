@@ -33,8 +33,11 @@ function update(req, res, next) {
   Object.assign(req.userModel, {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    email: req.body.email,
   });
+  if (req.body.email !== req.userModel.email) {
+    req.userModel.isActived = false;
+    req.userModel.email = req.body.email;
+  }
   if (req.body.imageUrl) req.userModel.imageUrl = req.body.imageUrl;
   if (req.body.avatar) req.userModel.avatar = req.body.avatar;
   if (req.body.password) {
@@ -57,8 +60,11 @@ function updateProfile(req, res, next) {
   Object.assign(req.userModel, {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    email: req.body.email,
   });
+  if (req.body.email !== req.userModel.email) {
+    req.userModel.isActived = false;
+    req.userModel.email = req.body.email;
+  }
   if (req.body.imageUrl) req.userModel.imageUrl = req.body.imageUrl;
   if (req.body.avatar) req.userModel.avatar = req.body.avatar;
   if (req.body.password) {

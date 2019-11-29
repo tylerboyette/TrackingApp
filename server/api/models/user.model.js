@@ -73,8 +73,10 @@ userSchema.pre('save', function preSave(next) {
 userSchema.post('save', function emailVerification(item) {
   if (
     this.email &&
-    (this.$locals.wasNew || this.isModified('email') || !this.isActived)
+    this.isActived &&
+    (this.$locals.wasNew || this.isModified('email'))
   ) {
+    console.log('user is modified', this.isModified('email'));
     const token = jwt.sign(
       {
         _id: item._id, // eslint-disable-line
@@ -90,7 +92,7 @@ userSchema.post('save', function emailVerification(item) {
           subject: 'Confirm your email!',
           html: `Hello, <b>${item.firstName} ${item.lastName}!</b> <br/>
           <p>Welcome to signup Jogging Track Heroku App</p><br/>
-          Please click this email to confirm your email. <br/><a href = "${url}">Confirm your Email</a><br/><span>Thanks</span>`,
+          Please click this link to confirm your email address. <br/><a href = "${url}">Confirm your Email</a><br/><span>Thanks</span>`,
         },
         (err, info) => {
           // eslint-disable-next-line no-console

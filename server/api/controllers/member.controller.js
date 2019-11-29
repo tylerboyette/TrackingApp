@@ -17,42 +17,75 @@ const charge = (token, amt) => {
   });
 };
 function upgrade(req, res) {
-  charge(req.body.token.token.id, req.body.amount)
-    .then(result => {
-      User.findById(req.user._id).then(user => {
-        user.membership = 'basic';
-        user.save().then(newUser => {
-          const token = jwt.sign(
-            {
+  if (req.body.amount >= 0) {
+    charge(req.body.token.token.id, req.body.amount)
+      .then(result => {
+        User.findById(req.user._id).then(user => {
+          user.membership = 'basic';
+          user.save().then(newUser => {
+            const token = jwt.sign(
+              {
+                _id: newUser._id, // eslint-disable-line
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                email: newUser.email,
+                role: newUser.role,
+                membership: newUser.membership,
+              },
+              config.jwtSecret,
+              { expiresIn: config.jwtExpires },
+            );
+
+            res.json({
               _id: newUser._id, // eslint-disable-line
               firstName: newUser.firstName,
               lastName: newUser.lastName,
               email: newUser.email,
               role: newUser.role,
+              imageUrl: newUser.imageUrl,
+              avatar: newUser.avatar,
+              isActived: newUser.isActived,
               membership: newUser.membership,
-            },
-            config.jwtSecret,
-            { expiresIn: config.jwtExpires },
-          );
-
-          res.json({
+              token,
+            });
+          });
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        return res.status(500).json({ message: 'Stripe API call error' });
+      });
+  } else {
+    User.findById(req.user._id).then(user => {
+      user.membership = 'free';
+      user.save().then(newUser => {
+        const token = jwt.sign(
+          {
             _id: newUser._id, // eslint-disable-line
             firstName: newUser.firstName,
             lastName: newUser.lastName,
             email: newUser.email,
             role: newUser.role,
-            imageUrl: newUser.imageUrl,
-            avatar: newUser.avatar,
-            isActived: newUser.isActived,
             membership: newUser.membership,
-            token,
-          });
+          },
+          config.jwtSecret,
+          { expiresIn: config.jwtExpires },
+        );
+
+        res.json({
+          _id: newUser._id, // eslint-disable-line
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          email: newUser.email,
+          role: newUser.role,
+          imageUrl: newUser.imageUrl,
+          avatar: newUser.avatar,
+          isActived: newUser.isActived,
+          membership: newUser.membership,
+          token,
         });
       });
-    })
-    .catch(error => {
-      console.log(error);
-      return res.status(500).json({ message: 'Stripe API call error' });
     });
+  }
 }
 module.exports = { upgrade };

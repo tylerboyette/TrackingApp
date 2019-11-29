@@ -149,7 +149,6 @@ function socialLogin(req, res, next) {
 function verifyEmail(req, res) {
   try {
     const { _id } = jwt.verify(req.body.data, config.jwtSecret);
-    console.log(_id);
     User.findOne({ _id }).then(user => {
       console.log('user found', user);
       if (!user) res.json({ message: 'Can not find user!' });
