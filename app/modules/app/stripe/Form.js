@@ -80,7 +80,9 @@ class FormPage extends Component {
       <div style={{ marginTop: '100px' }}>
         <Form onSubmit={e => this.onSubmit(e)} size="large">
           <Segment stacked>
-            <br />
+            <Header as="h2" color="blue" textAlign="center">
+              MemberShip Plan
+            </Header>
             <CardElement />
             <Card.Group centered>
               <Card
