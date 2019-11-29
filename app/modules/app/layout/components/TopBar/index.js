@@ -31,17 +31,11 @@ class TopBar extends Component {
           <Menu.Item as={Link} header to="/">
             Jogging Track
           </Menu.Item>
-
           {currentUser.isActived === false && (
             <Menu.Item as={Link} header to="/sendEmail">
               Verify Email Address
             </Menu.Item>
           )}
-
-          <Menu.Item as={Link} header to="/member">
-            MemberShip
-          </Menu.Item>
-
           {(currentUser.role === 'admin' || currentUser.role === 'manager') && (
             <Dropdown item simple text="Users">
               <Dropdown.Menu>
@@ -83,6 +77,10 @@ class TopBar extends Component {
                     </span>
                   </>
                 </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/member">
+                  Membership <Icon name="user md" />
+                </Dropdown.Item>
+
                 <Dropdown.Item as={Link} to="/profile">
                   Settings
                   <Icon name="setting" />

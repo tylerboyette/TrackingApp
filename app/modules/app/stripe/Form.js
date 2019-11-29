@@ -85,7 +85,7 @@ class FormPage extends Component {
         <Form onSubmit={e => this.onSubmit(e)} size="large">
           <Segment stacked>
             <Header as="h2" color="blue" textAlign="center">
-              MemberShip Plan
+              Membership Plan
             </Header>
             <CardElement />
             <Card.Group centered>
@@ -122,7 +122,7 @@ class FormPage extends Component {
             </Card.Group>
             <br /> <br />
             <Button primary fluid>
-              Upgrade MemberShip
+              {this.membership === 'free' ? 'Switch' : 'Upgrade membership now'}
             </Button>
           </Segment>
         </Form>

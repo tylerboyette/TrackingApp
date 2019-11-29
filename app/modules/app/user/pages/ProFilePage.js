@@ -63,6 +63,9 @@ class Profile extends Component {
     const { saveProfile } = this.props;
     let imgUrl = null;
     let previewUrl = null;
+
+    // user image uploading to firebase
+
     if (files.length) {
       const name = +new Date() + '-' + files[0].name;
       const previewName = +new Date() + '-avatar.jpg';
@@ -74,6 +77,9 @@ class Profile extends Component {
         .put(files[0], metadata)
         .then(snapshot => snapshot.ref.getDownloadURL());
     }
+
+    // user avatar image base64 string uploading to firebase
+
     if (preview) {
       const previewName = +new Date() + '-avatar.jpg';
       previewUrl = await storage
@@ -81,6 +87,7 @@ class Profile extends Component {
         .putString(preview, 'data_url')
         .then(snapshot => snapshot.ref.getDownloadURL());
     }
+
     saveProfile({
       body: {
         firstName: user.firstName,
@@ -91,6 +98,7 @@ class Profile extends Component {
         password: user.password,
       },
     });
+    // uploading files to local directory
 
     // const fd = new FormData();
     // if (files.length) {
@@ -124,10 +132,13 @@ class Profile extends Component {
 
   render() {
     const { user, files, image } = this.state;
+
+    // unsolved error image access to firebase
     // console.log(image);
     // var img = new Image();
     // img.crossOrigin = 'Anonymous';
     // img.src = image;
+
     return (
       <Container fluid className="main-app-container">
         <Header as="h2" content="Profile Settings" textAlign="center" />
@@ -152,7 +163,6 @@ class Profile extends Component {
                   onClose={this.onClose}
                   onBeforeFileLoad={this.onBeforeFileLoad}
                   src={image}
-                  // img={img}
                 />
               ) : (
                 <>

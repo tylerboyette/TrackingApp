@@ -73,8 +73,7 @@ userSchema.pre('save', function preSave(next) {
 userSchema.post('save', function emailVerification(item) {
   if (
     this.email &&
-    this.isActived &&
-    (this.$locals.wasNew || this.isModified('email'))
+    (this.$locals.wasNew || this.isModified('email') || !this.isActived)
   ) {
     console.log('user is modified', this.isModified('email'));
     const token = jwt.sign(
