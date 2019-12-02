@@ -110,6 +110,7 @@ async function upgrade(req, res) {
           }
           User.findById(req.user._id).then(user => {
             user.membership = 'basic';
+            user.subscriptionID = subscription.id;
             user.customerID = customer.id;
             user.save().then(newUser => {
               const token = jwt.sign(
@@ -147,7 +148,11 @@ async function upgrade(req, res) {
         return res.status(500).json({ message: 'Stripe API call error' });
       });
   } else {
-    User.findById(req.user._id).then(user => {
+    User.findById(req.user._id).then(async function(user) {
+      const stripeCustomer = await stripe.customers.retrieve(user.customerID);
+      const [subscription] = stripeCustomer.subscriptions.data;
+      await stripe.subscriptions.del(subscription.id);
+
       user.customerID = '';
       user.membership = 'free';
       user.save().then(newUser => {
