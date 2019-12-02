@@ -38,7 +38,6 @@ class FormPage extends Component {
       const token = await this.props.stripe.createToken({
         name:
           this.props.currentUser.firstName + this.props.currentUser.lastName,
-        amount: 25,
       });
 
       this.props.memberUpgrade({
@@ -87,7 +86,7 @@ class FormPage extends Component {
             <Header as="h2" color="blue" textAlign="center">
               Membership Plan
             </Header>
-            <CardElement />
+            {this.state.membership === 'basic' && <CardElement />}
             <Card.Group centered>
               <Card
                 className={

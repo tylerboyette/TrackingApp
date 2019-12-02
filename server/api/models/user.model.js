@@ -25,6 +25,10 @@ const userSchema = new Schema({
     enum: Object.values(MEMBERSHIP),
     default: MEMBERSHIP.Free,
   },
+  customerID: {
+    type: String,
+    default: '',
+  },
   role: {
     type: String,
     required: true,
