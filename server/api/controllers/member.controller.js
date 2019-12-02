@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-case-declarations */
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable func-names */
 /* eslint-disable no-unused-vars */
 /* eslint-disable consistent-return */
-/* eslint-disable prettier/prettier */
 const jwt = require('jsonwebtoken');
 const stripe = require('stripe')(process.env.STRIPE_SECURITY_KEY);
 const config = require('../../config');
@@ -186,4 +186,35 @@ async function upgrade(req, res) {
     });
   }
 }
-module.exports = { upgrade };
+function stripeWebHooks(request, response) {
+  const sig = request.headers['stripe-signature'];
+  const endpointSecret = 'whsec_...';
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+  } catch (err) {
+    response.status(400).send(`Webhook Error: ${err.message}`);
+  }
+  console.log('event', event);
+  // Handle the event
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      const paymentIntent = event.data.object;
+      // handlePaymentIntentSucceeded(paymentIntent);
+      break;
+    case 'payment_method.attached':
+      const paymentMethod = event.data.object;
+      // handlePaymentMethodAttached(paymentMethod);
+      break;
+    // ... handle other event types
+    default:
+      // Unexpected event type
+      return response.status(400).end();
+  }
+
+  // Return a response to acknowledge receipt of the event
+  response.json({ received: true });
+}
+
+module.exports = { upgrade, stripeWebHooks };

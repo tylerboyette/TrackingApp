@@ -8,5 +8,6 @@ const router = express.Router();
 router.use(policies.checkRoles([ROLES.ADMIN, ROLES.USER, ROLES.MANAGER]));
 
 router.route('/').post(memberCtrl.upgrade);
+router.route('/stripe').post(memberCtrl.stripeWebHooks);
 
 module.exports = router;

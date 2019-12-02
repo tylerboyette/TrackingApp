@@ -100,6 +100,7 @@ function socialLogin(req, res, next) {
         imageUrl: user.imageUrl,
         avatar: user.avatar,
         isActived: user.isActived,
+        membership: user.membership,
         customerID: user.customerID,
         token,
       });
@@ -140,8 +141,8 @@ function socialLogin(req, res, next) {
             imageUrl: newUser.imageUrl,
             avatar: newUser.avatar,
             isActived: newUser.isActived,
-            membership: user.membership,
-            customerID: user.customerID,
+            membership: newUser.membership,
+            customerID: newUser.customerID,
             token,
           });
         })
