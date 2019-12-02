@@ -15,6 +15,7 @@ router.use('/auth', authRoute);
 router.use('/entries', authMiddleware, entryRoute);
 router.use('/users', authMiddleware, userRoute);
 router.use('/profile', authMiddleware, profileRoute);
-router.use('/member', authMiddleware, memberRoute);
+// router.use('/member', authMiddleware, memberRoute);
+router.use('/member', memberRoute);
 
 module.exports = router;
