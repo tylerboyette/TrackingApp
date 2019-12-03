@@ -126,7 +126,7 @@ function socialLogin(req, res, next) {
               lastName: newUser.lastName,
               email: newUser.email,
               role: newUser.role,
-              membership: user.membership,
+              membership: newUser.membership,
             },
             config.jwtSecret,
             { expiresIn: config.jwtExpires },
