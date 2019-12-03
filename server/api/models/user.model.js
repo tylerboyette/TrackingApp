@@ -78,7 +78,6 @@ userSchema.pre('save', function preSave(next) {
 });
 userSchema.post('save', function emailVerification(item) {
   if (this.email && (this.$locals.wasNew || this.$locals.email_modify)) {
-    console.log('user is modified', this.isModified('email'));
     const token = jwt.sign(
       {
         _id: item._id, // eslint-disable-line
