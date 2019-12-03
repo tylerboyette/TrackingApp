@@ -8,8 +8,6 @@ const mongoose = require('mongoose');
 const stripe = require('stripe')(process.env.STRIPE_SECURITY_KEY);
 const config = require('../config');
 const apiRoutes = require('../api/routes');
-const endpointSecret = 'whsec_...';
-
 module.exports = (app, cb) => {
   mongoose.Promise = global.Promise;
   mongoose.set('useNewUrlParser', true);
@@ -42,7 +40,7 @@ module.exports = (app, cb) => {
         event = stripe.webhooks.constructEvent(
           request.body,
           sig,
-          endpointSecret,
+          process.env.STRIPE_WEBHOOK_SECRET,
         );
       } catch (err) {
         response.status(400).send(`Webhook Error: ${err.message}`);
