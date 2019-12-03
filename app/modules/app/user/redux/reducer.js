@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import produce from 'immer';
 import * as CONSTANTS from './constants';
 

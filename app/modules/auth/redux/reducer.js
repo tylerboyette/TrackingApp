@@ -33,7 +33,6 @@ const authReducer = (state = initialState, action) =>
         draft.message = action.data.message;
         break;
       case UPGRADE_MEMBER_SUCCESS:
-        console.log('hello membership', action.data);
         draft.currentUser = action.data;
         break;
     }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-undef */
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import request from 'utils/request';

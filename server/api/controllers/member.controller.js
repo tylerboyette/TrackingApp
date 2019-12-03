@@ -92,6 +92,7 @@ const User = require('../models/user.model');
 //   }
 // }
 async function upgrade(req, res) {
+  console.log('hello');
   if (req.body.amount >= 0) {
     const customer = await stripe.customers.create({
       email: req.user.email,
