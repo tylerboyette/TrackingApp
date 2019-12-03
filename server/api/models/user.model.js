@@ -63,6 +63,8 @@ userSchema.methods.authenticate = function authenticate(password) {
 
 userSchema.pre('save', function preSave(next) {
   this.$locals.wasNew = this.isNew;
+  this.$locals.email_modify = this.isModified('email');
+
   if (this.password && this.isModified('password')) {
     this.password = this.hashPassword(this.password)
       .then(password => {
@@ -75,10 +77,7 @@ userSchema.pre('save', function preSave(next) {
   }
 });
 userSchema.post('save', function emailVerification(item) {
-  if (
-    this.email &&
-    (this.$locals.wasNew || this.isModified('email') || !this.isActived)
-  ) {
+  if (this.email && (this.$locals.wasNew || this.$locals.email_modify)) {
     console.log('user is modified', this.isModified('email'));
     const token = jwt.sign(
       {
