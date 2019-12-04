@@ -26,46 +26,42 @@ module.exports = (app, cb) => {
   });
 
   app.use(bodyParser.json({ limit: '20mb' }));
-  // app.use(bodyParser.raw({ type: '*/*' }));
+  app.use(bodyParser.raw({ type: 'application/json' }));
   app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
   app.use('/api', apiRoutes);
-  app.post(
-    '/webhook',
-    // bodyParser.raw({ type: 'application/json' }),
-    bodyParser.raw({ type: '*/*' }),
-    (request, response) => {
-      const sig = request.headers['stripe-signature'];
-      console.log('sig', sig);
-      let event;
+  app.post('/webhook', (request, response) => {
+    console.log(request, response);
+    const sig = request.headers['stripe-signature'];
 
-      try {
-        event = stripe.webhooks.constructEvent(
-          request.body,
-          sig,
-          process.env.STRIPE_WEBHOOK_SECRET,
-        );
-      } catch (err) {
-        response.status(400).send(`Webhook Error: ${err.message}`);
-      }
+    let event;
 
-      // Handle the event
-      switch (event.type) {
-        case 'payment_intent.succeeded':
-          const paymentIntent = event.data.object;
-          // handlePaymentIntentSucceeded(paymentIntent);
-          break;
-        case 'payment_method.attached':
-          const paymentMethod = event.data.object;
-          // handlePaymentMethodAttached(paymentMethod);
-          break;
-        // ... handle other event types
-        default:
-          // Unexpected event type
-          return response.status(400).end();
-      }
+    try {
+      event = stripe.webhooks.constructEvent(
+        request.body,
+        sig,
+        process.env.STRIPE_WEBHOOK_SECRET,
+      );
+    } catch (err) {
+      response.status(400).send(`Webhook Error: ${err.message}`);
+    }
 
-      // Return a response to acknowledge receipt of the event
-      response.json({ received: true });
-    },
-  );
+    // Handle the event
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        const paymentIntent = event.data.object;
+        // handlePaymentIntentSucceeded(paymentIntent);
+        break;
+      case 'payment_method.attached':
+        const paymentMethod = event.data.object;
+        // handlePaymentMethodAttached(paymentMethod);
+        break;
+      // ... handle other event types
+      default:
+        // Unexpected event type
+        return response.status(400).end();
+    }
+
+    // Return a response to acknowledge receipt of the event
+    response.json({ received: true });
+  });
 };
