@@ -29,8 +29,7 @@ module.exports = (app, cb) => {
   app.use(bodyParser.raw({ type: 'application/json' }));
   app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
   app.use('/api', apiRoutes);
-  app.post('/webhook', (request, response) => {
-    console.log(request, response);
+  app.post('/webhook', bodyParser.raw({ type: '*/*' }), (request, response) => {
     const sig = request.headers['stripe-signature'];
 
     let event;
