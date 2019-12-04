@@ -35,7 +35,7 @@ module.exports = (app, cb) => {
     bodyParser.raw({ type: '*/*' }),
     (request, response) => {
       const sig = request.headers['stripe-signature'];
-
+      console.log('sig', sig);
       let event;
 
       try {
