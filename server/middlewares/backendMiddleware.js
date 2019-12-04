@@ -31,7 +31,7 @@ module.exports = (app, cb) => {
   app.use('/api', apiRoutes);
   app.post('/webhook', bodyParser.raw({ type: '*/*' }), (request, response) => {
     const sig = request.headers['stripe-signature'];
-
+    console.log(request.headers);
     let event;
 
     try {
