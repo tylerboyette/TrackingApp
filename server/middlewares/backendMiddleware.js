@@ -40,28 +40,29 @@ module.exports = (app, cb) => {
         sig,
         process.env.STRIPE_WEBHOOK_SECRET,
       );
+      console.log(event);
+
+      // Handle the event
+      switch (event.type) {
+        case 'payment_intent.succeeded':
+          const paymentIntent = event.data.object;
+          // handlePaymentIntentSucceeded(paymentIntent);
+          break;
+        case 'payment_method.attached':
+          const paymentMethod = event.data.object;
+          // handlePaymentMethodAttached(paymentMethod);
+          break;
+        // ... handle other event types
+        default:
+          // Unexpected event type
+          return response.status(400).end();
+      }
+
+      // Return a response to acknowledge receipt of the event
+      response.json({ received: true });
     } catch (err) {
+      console.log(err);
       response.status(400).send(`Webhook Error: ${err.message}`);
     }
-    console.log(event);
-
-    // Handle the event
-    switch (event.type) {
-      case 'payment_intent.succeeded':
-        const paymentIntent = event.data.object;
-        // handlePaymentIntentSucceeded(paymentIntent);
-        break;
-      case 'payment_method.attached':
-        const paymentMethod = event.data.object;
-        // handlePaymentMethodAttached(paymentMethod);
-        break;
-      // ... handle other event types
-      default:
-        // Unexpected event type
-        return response.status(400).end();
-    }
-
-    // Return a response to acknowledge receipt of the event
-    response.json({ received: true });
   });
 };
