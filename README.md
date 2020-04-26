@@ -3,6 +3,7 @@ Jogging track with Stripe API and google map
 
 # Description
 •	User must be able to create an account and log in
+
 •	When logged in, a user can see, edit and delete trips he entered.
 
 •	Implement at least three roles with different permission levels: a regular user would only be able to CRUD on their owned records, a user manager would be able to CRUD users, and an admin would be able to CRUD all records and users.
