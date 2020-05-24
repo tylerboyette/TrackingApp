@@ -1,5 +1,5 @@
-# jogging-track
-Jogging track with Stripe API and google map
+# TrackingApp
+This is application with Stripe API and Google map
 
 # Description
 •	User must be able to create an account and log in
